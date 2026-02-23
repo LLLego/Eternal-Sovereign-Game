@@ -35,12 +35,11 @@
       padding: 0;
     }
 
-    html,
-    body {
-      height: 100%;
-      font-family: 'Noto Serif SC', serif;
-    }
-
+html, body {
+  height: auto !important;
+  min-height: 100%;
+  overflow-y: auto !important; /* Forces the scrollbar to appear on the body */
+}
     body {
       background-color: #c8b278;
       overflow-x: hidden;
@@ -76,15 +75,24 @@
       padding: 0 12px 24px;
     }
 
-    #hdr {
-      background: linear-gradient(180deg, rgba(20, 8, 0, 0.94), rgba(20, 8, 0, 0.88));
-      border-bottom: 3px solid var(--gold2);
-      padding: 0;
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-    }
+    #sticky-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+#hdr {
+  background: linear-gradient(180deg, rgba(20, 8, 0, 0.94), rgba(20, 8, 0, 0.88));
+  border-bottom: 3px solid var(--gold2);
+  padding: 0;
+  
+  /* 'static' forces it to sit at the top and NEVER follow the scroll */
+  position: static !important; 
+  top: auto !important;
+  
+  z-index: 200;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
 
     .hdr-top {
       display: flex;
@@ -155,16 +163,18 @@
       text-align: center;
     }
 
-    .nav {
-      display: flex;
-      flex-wrap: wrap;
-      background: rgba(15, 6, 0, 0.9);
-      border-bottom: 2px solid rgba(138, 100, 0, 0.28);
-      position: sticky;
-      top: 82px;
-      z-index: 199;
-    }
-
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  background: rgba(15, 6, 0, 0.9);
+  border-bottom: 2px solid rgba(138, 100, 0, 0.28);
+  
+  /* 'static' forces it to sit below header and NEVER follow the scroll */
+  position: static !important;
+  top: auto !important;
+  
+  z-index: 199;
+}
     .nb {
       font-family: 'ZCOOL XiaoWei', serif;
       font-size: .63rem;
@@ -191,9 +201,11 @@
       background: rgba(212, 168, 50, 0.06);
     }
 
-    #mc {
-      padding: 12px 0;
-    }
+#mc {
+  padding: 12px 0;
+  position: relative;
+  z-index: 1;
+}
 
     .tc {
       display: none;
@@ -1997,6 +2009,10 @@
       letter-spacing: 3px;
       margin: 3px 0;
     }
+        @keyframes divineGlow {
+      0%, 100% { text-shadow: 0 0 2px rgba(255, 255, 255, 0.3); }
+      50% { text-shadow: 0 0 8px rgba(255, 255, 255, 0.6); }
+    }
 
     .tier-0 {
       background: linear-gradient(135deg, rgba(200, 185, 145, 0.22), rgba(240, 228, 200, 0.32));
@@ -2012,7 +2028,33 @@
       background: linear-gradient(135deg, rgba(140, 37, 21, 0.1), rgba(200, 120, 0, 0.12));
       border: 1px solid rgba(200, 120, 0, 0.32);
     }
+    
+    .tier-3 { 
+        background: linear-gradient(135deg, rgba(160, 110, 140, 0.12), rgba(200, 150, 180, 0.18)); 
+        border: 1px solid rgba(160, 110, 140, 0.35); 
+    }
+    .tier-3 .tier-nm { color: #7a2b5c; }
 
+    /* TIER 4: God Domain - Deep Celestial Teal / Sapphire */
+    .tier-4 { 
+        background: linear-gradient(135deg, rgba(60, 100, 110, 0.08), rgba(90, 130, 140, 0.15)); 
+        border: 1px solid rgba(60, 100, 110, 0.3); 
+    }
+    .tier-4 .tier-nm { 
+        color: #0f5e63; /* Dark Teal Ink */
+        animation: divineGlow 4s ease-in-out infinite; 
+    }
+
+    /* TIER 5: Primordial Chaos - Dark Void Purple (No Box) */
+    .tier-5 { 
+        background: linear-gradient(135deg, rgba(80, 50, 90, 0.08), rgba(110, 70, 120, 0.15)); 
+        border: 1px solid rgba(80, 50, 90, 0.3); 
+    }
+    .tier-5 .tier-nm { 
+        color: #4b2c5e; /* Deep Purple Ink */
+        animation: divineGlow 5s ease-in-out infinite; 
+    }
+    
     .tier-nm {
       font-family: 'Ma Shan Zheng', cursive;
       font-size: 1.1rem;
@@ -2031,7 +2073,7 @@
       color: #b85020;
       animation: divineGlow 2.5s ease-in-out infinite;
     }
-
+  
     @keyframes divineGlow {
 
       0%,
@@ -2044,15 +2086,47 @@
       }
     }
 
-    /* Node map */
-    .node-svg-container {
-      width: 100%;
-      border: 1px solid rgba(138, 100, 0, 0.22);
-      overflow: hidden;
-      background: linear-gradient(155deg, rgba(245, 235, 210, 0.6), rgba(232, 220, 190, 0.8));
-      display: block;
-    }
+  /* Container acts as the "Camera" */
+.node-svg-container {
+  width: 100%;
+  height: 350px; /* Increased slightly */
+  border: 2px solid var(--brgold);
+  background: #e4d49e; /* Matches the map parchment exactly */
+  display: block;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.1);
+}
 
+.node-svg-container:active {
+  cursor: grabbing; /* Closed hand when dragging */
+}
+
+/* Map Controls (Zoom Buttons) */
+.map-controls {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.map-btn {
+  background: rgba(30, 15, 0, 0.85); /* Deep Ink */
+  color: var(--gold3);
+  border: 1px solid var(--gold2);
+  width: 32px;
+  height: 32px;
+  border-radius: 2px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.map-btn:hover { background: var(--ink); border-color: var(--gold3); }
     .node-dot {
       cursor: pointer;
       transition: all .2s;
@@ -2420,6 +2494,116 @@
         grid-template-columns: 1fr;
       }
     }
+    /* Music Control Widget */
+.hdr-music-row {
+  display: flex;
+  justify-content: flex-end; /* Pushes player to the right */
+  padding: 0 18px 8px;
+}
+
+#yt-player {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  width: 300px;
+  height: 300px;
+  opacity: 0;
+  pointer-events: none;
+}
+.music-widget {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 15px;
+  background: rgba(10, 5, 0, 0.8);
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+}
+
+#track-info {
+  font-size: 0.65rem;
+  color: var(--gold3);
+  font-family: 'ZCOOL XiaoWei', serif;
+  min-width: 110px;
+  text-align: center;
+}
+
+/* Custom Range Slider */
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 80px;
+  height: 3px;
+  background: var(--ink3);
+  border-radius: 2px;
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--gold3);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1px solid var(--ink);
+  box-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+
+/* Dynamic Button States */
+.music-btn-off {
+  background: rgba(166, 50, 32, 0.1) !important;
+  border-color: rgba(166, 50, 32, 0.4) !important;
+  color: #ff6b6b !important;
+}
+
+.music-btn-on {
+  background: rgba(45, 122, 82, 0.2) !important;
+  border-color: var(--jade3) !important;
+  color: #52c47a !important;
+  animation: glow-green 2s infinite alternate;
+}
+
+/* Playlist Styling */
+.playlist-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid rgba(212, 168, 50, 0.2);
+  transition: background 0.2s;
+}
+.playlist-item:hover { background: rgba(212, 168, 50, 0.1); }
+.playlist-item.active { border-left: 3px solid var(--jade2); background: rgba(45, 122, 82, 0.1); }
+
+.track-name {
+  font-family: 'ZCOOL XiaoWei', serif;
+  font-size: 0.85rem;
+  color: var(--gold3);
+  cursor: pointer;
+  flex-grow: 1;
+}
+.remove-track {
+  color: var(--verm2);
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border: 1px solid var(--verm);
+}
+.node-svg-container {
+  width: 100%;
+  border: 1px solid rgba(138, 100, 0, 0.22);
+  background: linear-gradient(155deg, rgba(245, 235, 210, 0.6), rgba(232, 220, 190, 0.8));
+  display: block;
+  /* Add these two lines: */
+  overflow-x: auto;
+  white-space: nowrap;
+}
+/* Ensure the SVG itself respects the width */
+.node-svg-container svg {
+  min-width: 800px; /* Forces scroll on small screens */
+}
   </style>
 </head>
 
@@ -2537,70 +2721,110 @@
   </div>
 
   <div id="app" style="display:none;">
-    <div id="hdr">
-      <div class="hdr-top">
+<div id="sticky-wrapper">
+
+<div id="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-title">永恒至尊 <span style="font-size:.75rem;letter-spacing:5px;color:rgba(212,168,50,0.55)">The Eternal Sovereign</span></div>
+      <div class="hdr-sub" id="rdsp">凡人 · Mortal · Physical Body Stage</div>
+    </div>
+    <div class="res-bar">
+      <!-- OLD MUSIC BUTTON REMOVED FROM HERE -->
+      <div class="res">
+        <div class="res-ico">☯️</div>
         <div>
-          <div class="hdr-title">永恒至尊 <span style="font-size:.75rem;letter-spacing:5px;color:rgba(212,168,50,0.55)">The
-              Eternal Sovereign</span></div>
-          <div class="hdr-sub" id="rdsp">凡人 · Mortal · Physical Body Stage</div>
-        </div>
-        <div class="res-bar">
-          <button class="btn" id="music-toggle" onclick="toggleMusic()" style="margin-left: 10px;">🔈 Music: OFF</button>
-          <div class="res">
-            <div class="res-ico">☯️</div>
-            <div>
-              <div class="res-lbl">Qi 灵气</div>
-              <div class="res-val" id="qd">0</div>
-            </div>
-          </div>
-          <div class="res">
-            <div class="res-ico">💠</div>
-            <div>
-              <div class="res-lbl">Stones 灵石</div>
-              <div class="res-val" id="stoned">0</div>
-            </div>
-          </div>
-          <div class="res">
-            <div class="res-ico">🟡</div>
-            <div>
-              <div class="res-lbl">Gold 金叶</div>
-              <div class="res-val" id="goldd">0</div>
-            </div>
-          </div>
-          <div class="res">
-            <div class="res-ico">⭐</div>
-            <div>
-              <div class="res-lbl">Renown 声望</div>
-              <div class="res-val" id="repd">0</div>
-            </div>
-          </div>
-          <div class="res">
-            <div class="res-ico">⚡</div>
-            <div>
-              <div class="res-lbl">Tribs 天劫</div>
-              <div class="res-val" id="tribd">0</div>
-            </div>
-          </div>
+          <div class="res-lbl">Qi 灵气</div>
+          <div class="res-val" id="qd">0</div>
         </div>
       </div>
-      <div class="realm-badge" id="rmbadge">凡人境 · Mortal Realm</div>
+      <div class="res">
+        <div class="res-ico">💠</div>
+        <div>
+          <div class="res-lbl">Stones 灵石</div>
+          <div class="res-val" id="stoned">0</div>
+        </div>
+      </div>
+      <div class="res">
+        <div class="res-ico">🟡</div>
+        <div>
+          <div class="res-lbl">Gold 金叶</div>
+          <div class="res-val" id="goldd">0</div>
+        </div>
+      </div>
+      <div class="res">
+        <div class="res-ico">⭐</div>
+        <div>
+          <div class="res-lbl">Renown 声望</div>
+          <div class="res-val" id="repd">0</div>
+        </div>
+      </div>
+      <div class="res">
+        <div class="res-ico">⚡</div>
+        <div>
+          <div class="res-lbl">Tribs 天劫</div>
+          <div class="res-val" id="tribd">0</div>
+        </div>
+      </div>
     </div>
-    <div class="nav">
-      <button class="nb act" onclick="showT('cul',this)">修炼 Cultivation</button>
-      <button class="nb" onclick="showT('sect',this)">宗门 Sect</button>
-      <button class="nb" onclick="showT('alch',this)">丹药 Alchemy</button>
-      <button class="nb" onclick="showT('form',this)">阵法 Formations</button>
-      <button class="nb" onclick="showT('dao',this)">道法 Daos</button>
-      <button class="nb" onclick="showT('man',this)">功法 Manuals</button>
-      <button class="nb" onclick="showT('world',this)">天下 World</button>
-      <button class="nb" onclick="showT('chars',this)">人物 Characters</button>
-      <button class="nb" onclick="showT('companions',this)">道侣 Companions</button>
-      <button class="nb" onclick="showT('guild',this)">势力 Guilds</button>
-      <button class="nb" onclick="showT('shop',this)">🏬 Heavenly Bazaar</button>
-      <button class="nb" onclick="showT('soul',this)">✨ Soul Power</button>
-      <button class="nb" onclick="showT('sheet',this)">我 Self</button>
-      <button class="nb" onclick="showT('inv',this)">储物 Inventory</button>
+  </div>
+
+  <!-- NEW MUSIC WIDGET ROW ADDED HERE -->
+  <div class="hdr-music-row">
+    <div class="music-widget">
+      <div id="yt-player"></div>
+      <div id="track-info">Sovereign Silence</div>
+      <button class="btn music-btn-off" onclick="MusicManager.toggle()" id="music-toggle">🔈 MUSIC: OFF</button>
+      <button class="btn" onclick="MusicManager.next()" title="Next Track">⏭️</button>
+      <button class="btn" onclick="MusicManager.openPlaylist()" title="View Soul Collection">📜</button>
+      <button class="btn" onclick="MusicManager.openAddModal()" style="color:var(--jade3)" title="Add Melody">+</button>
+      <input type="range" min="0" max="100" value="50" oninput="MusicManager.setVolume(this.value)">
     </div>
+  </div>
+  <!-- END NEW WIDGET -->
+
+  <div class="realm-badge" id="rmbadge">凡人境 · Mortal Realm</div>
+</div>
+
+<div class="nav">
+  <button class="nb act" onclick="showT('cul',this)">修炼 Cultivation</button>
+  <button class="nb" onclick="showT('sect',this)">宗门 Sect</button>
+  <button class="nb" onclick="showT('alch',this)">丹药 Alchemy</button>
+  <button class="nb" onclick="showT('form',this)">阵法 Formations</button>
+  <button class="nb" onclick="showT('dao',this)">道法 Daos</button>
+  <button class="nb" onclick="showT('man',this)">功法 Manuals</button>
+  <button class="nb" onclick="showT('world',this)">天下 World</button>
+  <button class="nb" onclick="showT('chars',this)">人物 Characters</button>
+  <button class="nb" onclick="showT('companions',this)">道侣 Companions</button>
+  <button class="nb" onclick="showT('guild',this)">势力 Guilds</button>
+  <button class="nb" onclick="showT('shop',this)">🏬 Heavenly Bazaar</button>
+  <button class="nb" onclick="showT('soul',this)">✨ Soul Power</button>
+  <button class="nb" onclick="showT('sheet',this)">我 Self</button>
+  <button class="nb" onclick="showT('inv',this)">储物 Inventory</button>
+</div>
+<!-- NEW MODALS ADDED HERE (Outside the Nav) -->
+<div id="music-add-modal" class="modal" onclick="if(event.target===this)MusicManager.closeAddModal()">
+  <div class="modal-box" style="max-width:350px;">
+    <h2>Inscribe New Melody</h2>
+    <p class="modal-sub">Paste a YouTube Link to bind its frequency</p>
+    <input type="text" id="ms-input-url" placeholder="YouTube URL..." style="width:100%; padding:8px; margin-bottom:10px; background:rgba(0,0,0,0.3); border:1px solid var(--gold); color:white;">
+    <input type="text" id="ms-input-name" placeholder="Melody Name..." style="width:100%; padding:8px; margin-bottom:15px; background:rgba(0,0,0,0.3); border:1px solid var(--gold); color:white;">
+    <div class="br">
+      <button class="btn btn-jade" onclick="MusicManager.saveNewTrack()">Bind Soul</button>
+      <button class="btn" onclick="MusicManager.closeAddModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="music-list-modal" class="modal" onclick="if(event.target===this)MusicManager.closePlaylist()">
+  <div class="modal-box" style="max-width:400px;">
+    <h2>Soul Collection</h2>
+    <div id="playlist-container" class="scroll-sm" style="max-height:300px; text-align:left; margin:15px 0;"></div>
+    <button class="btn" onclick="MusicManager.closePlaylist()">Close</button>
+  </div>
+</div>
+</div>
+
     <div id="mc">
       <div id="cul" class="tc act">
         <div class="auto-panel">
@@ -2624,7 +2848,7 @@
         <div class="pnl">
           <div class="pt">修炼室 · Soul Cultivation</div>
           <div class="ps">Cultivate your divine soul across infinite realms of transcendence.</div>
-          <div class="ts mb8" id="soul-info">Current: <b class="tg">—</b> · Realm Index: <b class="tg">—</b></div>
+        <div class="ts mb8" id="soul-info">Current: <b class="tg">—</b> · Stage: <b class="tg">—</b> · Realm Index: <b class="tg">—</b></div>
           <div class="pw">
             <div id="qbar" class="pf pf-qi" style="width:0%"></div>
             <div class="pl" id="qbl">0 / 100 Qi</div>
@@ -3157,6 +3381,9 @@ function toggleMusic() {
       { id: 'time', nm: 'Time Dao', sub: '道 of the Eternal Moment', ico: '⏳', col: '#8a2080', rR: 4, tR: 5, msg: 'Nascent Soul + 5 Tribulations', eff: 'Dramatically multiplies passive Qi and all Dao training.', stg: [{ n: 'First Second', s: 0, tm: 1.0 }, { n: 'Slowing River', s: 300, tm: 1.5 }, { n: 'Frozen Moment', s: 1000, tm: 2.5 }, { n: 'Temporal Master', s: 3000, tm: 4.0 }, { n: 'Time Sovereign', s: 9000, tm: 7.0 }, { n: 'Eternal Witness', s: 25000, tm: 15.0 }] },
       { id: 'death', nm: "Reaper's Dao", sub: '道 of the Final Silence', ico: '💀', col: '#803020', rR: 5, tR: 7, msg: 'Soul Transformation + 7 Tribulations', eff: 'Multiplies combat damage and loot. Grants life-steal.', stg: [{ n: 'Mortal Touch', s: 0, dm: 1.0, lm: 1.0, st: 0 }, { n: "Death's Gaze", s: 400, dm: 1.3, lm: 1.2, st: 0.02 }, { n: 'Soul Severance', s: 1200, dm: 1.8, lm: 1.5, st: 0.05 }, { n: 'Grim Harvest', s: 3500, dm: 2.5, lm: 2.0, st: 0.1 }, { n: "Reaper's Domain", s: 10000, dm: 4.0, lm: 3.0, st: 0.18 }, { n: 'Death Sovereign', s: 28000, dm: 7.0, lm: 5.0, st: 0.3 }] },
       { id: 'void', nm: 'Void Dao', sub: '道 of Primordial Darkness', ico: '🕳️', col: '#4a1a80', rR: 6, tR: 8, msg: 'Void Return + 8 Tribulations', eff: 'Multiplies ALL gains. Passive spirit stone generation.', stg: [{ n: 'First Emptiness', s: 0, all: 1.0, gen: 0 }, { n: 'Dark Resonance', s: 500, all: 1.2, gen: 1 }, { n: 'Void Hunger', s: 2000, all: 1.5, gen: 3 }, { n: 'Devouring Maw', s: 6000, all: 2.0, gen: 8 }, { n: 'Void Sovereign', s: 18000, all: 3.0, gen: 20 }, { n: 'Primordial Void', s: 50000, all: 5.0, gen: 50 }] },
+      { id: 'creation', nm: 'Creation Dao', sub: '道 of Genesis', ico: '🌟', col: '#d4af37', rR: 12, tR: 10, msg: 'Immortal Emperor + 10 Tribulations', eff: 'Automatically generates Spirit Stones and Herbs based on rank.', stg: [{ n: 'Spark of Life', s: 0, cg: 1.0 }, { n: 'Matter Forging', s: 5000, cg: 5.0 }, { n: 'World Builder', s: 25000, cg: 15.0 }, { n: 'Genesis Sovereign', s: 100000, cg: 50.0 }, { n: 'True Creator', s: 500000, cg: 200.0 }] },
+      { id: 'karma', nm: 'Karma Dao', sub: '道 of Cause and Effect', ico: '🔗', col: '#ff6600', rR: 15, tR: 12, msg: 'Saint Realm + 12 Tribulations', eff: 'Massively boosts luck, drop rates, and all companion affinities.', stg: [{ n: 'Thread Seer', s: 0, lk: 1.1 }, { n: 'Fate Weaver', s: 10000, lk: 1.3 }, { n: 'Karmic Judge', s: 50000, lk: 1.8 }, { n: 'Destiny Sovereign', s: 200000, lk: 3.0 }, { n: 'Absolute Truth', s: 1000000, lk: 5.0 }] },
+      { id: 'chaos_dao', nm: 'Primordial Chaos', sub: '道 of the Unformed', ico: '🌀', col: '#ff00ff', rR: 25, tR: 15, msg: 'Chaos Realm + 15 Tribulations', eff: 'Multiplies all other Dao effects and breaks realm limits.', stg: [{ n: 'Formless', s: 0, mult: 1.5 }, { n: 'Entropy', s: 50000, mult: 3.0 }, { n: 'Origin Collapse', s: 250000, mult: 8.0 }, { n: 'Chaos Sovereign', s: 1000000, mult: 20.0 }, { n: 'The First Cause', s: 5000000, mult: 100.0 }] }
     ];
     const REALMS = [
       { nm: 'Mortal', sb: '凡人境', mq: 100, bb: .65, trib: false },
@@ -3257,6 +3484,9 @@ function toggleMusic() {
       { k: 'voidBloom', nm: 'Void Bloom', ico: '🌌', t: 60000, rR: 3, yld: [1, 1] },
       { k: 'cHrb', nm: 'Corrupted Herb', ico: '🖤', t: 45000, rR: 5, yld: [1, 2] },
       { k: 'immoFlwr', nm: 'Immortal Blossom', ico: '🌼', t: 120000, rR: 7, yld: [1, 1] },
+           { k: 'saintLotus', nm: 'Nine-Petal Saint Lotus', ico: '🪷', t: 300000, rR: 13, yld: [1, 1] },
+      { k: 'godFruit', nm: 'World Tree God Fruit', ico: '🍎', t: 1000000, rR: 17, yld: [1, 1] },
+      { k: 'chaosRoot', nm: 'Primordial Chaos Root', ico: '🌿', t: 5000000, rR: 25, yld: [1, 1] }
     ];
     const PILLS = {
       qiPill: { nm: 'Qi-Condensing Pill', cost: { qiGrass: 3 }, t: 5000, rR: 0, ef: 'Restores Qi. Quality scales gain.' },
@@ -3271,6 +3501,9 @@ function toggleMusic() {
       deathTonic: { nm: "Reaper's Essence", cost: { cHrb: 4, soulFlwr: 2 }, t: 40000, rR: 5, ef: '+Death Sharpness. Combat dmg +50%.' },
       voidPill: { nm: 'Primordial Void Pill', cost: { voidBloom: 6, cHrb: 4 }, t: 80000, rR: 6, ef: '+Void Dao sharpness.' },
       phoenixPill: { nm: 'Phoenix Rebirth Pill', cost: { fireHrb: 6, foundHrb: 4 }, t: 50000, rR: 3, ef: 'Restore full HP. One-time death save.' },
+           saintAscension: { nm: 'Saint Ascension Elixir', cost: { saintLotus: 5, immoFlwr: 10 }, t: 500000, rR: 13, ef: 'Breakthrough +30%. Massive Qi.' },
+      godKingPill: { nm: 'God King Source Pill', cost: { godFruit: 3, saintLotus: 5 }, t: 2000000, rR: 17, ef: '+Creation Dao Sharpness.' },
+      chaosEmperor: { nm: 'Chaos Emperor Pill', cost: { chaosRoot: 2, godFruit: 3 }, t: 10000000, rR: 25, ef: '+Chaos Dao. Stats x2 permanently.' }
     };
     const CPILLS = {
       wolfConc: { nm: 'Wolf Core Concentrate', cost: { wolfCore: 3 }, t: 8000, rR: 0, ef: 'Minor Qi boost.' },
@@ -3518,18 +3751,136 @@ function toggleMusic() {
       { id: 'rogue_immortal', nm: 'Rogue Immortal Yan', title: 'Free Spirit · 自由灵魂', ico: '🦅', desc: 'An immortal who rejected all constraints and bonds. True freedom is her path.', bon: 'Independence bonuses +50%. No external limitations.', relBon: [{ r: 60, b: 'free:0.50' }, { r: 100, b: 'free:1.0' }], gift: 'gold', unlockRealm: 5, preferredBg: ['wandering_swordsman'] },
       { id: 'fate_spinner', nm: 'Fate Spinner Wu', title: 'Destiny Weaver · 命运编织者', ico: '🔗', desc: 'A being who weaves the threads of fate itself. All destinies converge here.', bon: 'Destiny effects ×2. Fate manipulation +60%.', relBon: [{ r: 70, b: 'destinyPower:1.0' }, { r: 100, b: 'destinyPower:2.0,fateManip:0.60' }], gift: 'gold', unlockRealm: 6, preferredBg: ['prophecy_child', 'sealed_memories'] },
     ];
-    const GUILDS = [
-      { id: 'alch_asso', nm: '丹药会 Alchemist Association', ico: '⚗️', desc: 'Premier organization for pill cultivators. Members gain rare recipes and premium herbs.', bon: ['Alchemy quality ×1.3', 'Herb gather speed ×1.4', 'Exclusive pills access', '5 Stones/min passive income'], cost: 500, joinBon: { pq: 0.15, gspd: 1.4, stGen: 5 } },
-      { id: 'war_pav', nm: '战武殿 War Pavilion', ico: '⚔️', desc: 'Alliance of combat specialists. Members receive advanced battle formation training.', bon: ['Combat damage ×1.4', 'Evasion +15%', 'Loot ×1.3', 'Battle Formation free upgrade/day'], cost: 500, joinBon: { cdmg: 1.4, ev: 0.15, loot: 0.3 } },
-      { id: 'merch', nm: '灵石行 Merchant Guild', ico: '💎', desc: 'Powerful merchant organization controlling spirit stone flow across all continents.', bon: ['Spirit stones ×1.3 from all sources', 'Shop prices −20%', 'Gold income ×2', '10 Stones/min passive income'], cost: 500, joinBon: { stMult: 1.3, shopDisc: 0.8, goldMult: 2.0, stGen: 10 } },
-    ];
+// 1. GUILD DATA (Paste at top of script)
+const GUILDS = [
+    { 
+        id: 'alch_asso', 
+        nm: 'Medicine Valley (Alchemists)', 
+        ico: '⚗️', 
+        desc: 'Masters of life and death through pills.', 
+        bon: ['Alchemy quality ×1.3', 'Herb gather speed ×1.4', '5 Stones/min income'], 
+        cost: 500, 
+        joinBon: { pq: 0.15, gspd: 1.4, stGen: 5 } 
+    },
+    { 
+        id: 'war_pav', 
+        nm: 'Azure Dragon Pavilion (Warriors)', 
+        ico: '⚔️', 
+        desc: 'The elite combat force of the continent.', 
+        bon: ['Combat damage ×1.4', 'Evasion +15%', 'Loot ×1.3'], 
+        cost: 500, 
+        joinBon: { cdmg: 1.4, ev: 0.15, loot: 0.3 } 
+    },
+    { 
+        id: 'merch', 
+        nm: 'Golden Abacus (Merchants)', 
+        ico: '💎', 
+        desc: 'Controllers of the spiritual economy.', 
+        bon: ['Stones ×1.3', 'Shop prices -20%', '10 Stones/min income'], 
+        cost: 500, 
+        joinBon: { stMult: 1.3, shopDisc: 0.2, goldMult: 2.0, stGen: 10 } 
+    },
+    { 
+        id: 'shadow_pav', 
+        nm: 'Ghost Pavilion (Assassins)', 
+        ico: '🌑', 
+        desc: 'Shadows who collect information and lives.', 
+        bon: ['Evasion +25%', 'Crit Damage ×1.5', 'Gold ×1.5'], 
+        cost: 800, 
+        joinBon: { ev: 0.25, cdmg: 1.5, goldMult: 1.5 } 
+    },
+    { 
+        id: 'array_hall', 
+        nm: 'Celestial Array Hall', 
+        ico: '🔱', 
+        desc: 'Masters of formations and spatial seals.', 
+        bon: ['Stones ×1.2', '+5% Breakthrough', '15 Stones/min income'], 
+        cost: 1000, 
+        joinBon: { stMult: 1.2, brk: 0.05, stGen: 15 } 
+    },
+    { 
+        id: 'beast_tamer', 
+        nm: 'Thousand Beast Sect', 
+        ico: '🐾', 
+        desc: 'Those who command the savage spirit beasts.', 
+        bon: ['Loot ×1.5', 'Core drop +20%', 'Max HP ×1.2'], 
+        cost: 600, 
+        joinBon: { loot: 0.5, coreBonus: 0.2, hp: 1.2 } 
+    }
+];
+
+// 2. GUILD RANKS DATA (Must be defined before renderGuilds runs)
+const GUILD_RANKS = [
+    { title: "Outer Disciple", reqExp: 0, bonusMult: 1.0 },
+    { title: "Inner Disciple", reqExp: 500, bonusMult: 1.2 },
+    { title: "Elite Deacon", reqExp: 2500, bonusMult: 1.5 },
+    { title: "Hall Elder", reqExp: 10000, bonusMult: 2.0 },
+    { title: "Grand Protector", reqExp: 50000, bonusMult: 3.0 },
+    { title: "Guild Master", reqExp: 200000, bonusMult: 5.0 }
+];
+
+// 3. UPDATED RENDER FUNCTION (Replace your existing renderGuilds function)
+function renderGuilds() {
+  const con = document.getElementById('guild-list'); 
+  if (!con) return;
+  
+  // Render the list of guilds to join
+  con.innerHTML = GUILDS.map(g => {
+    const joined = G.guild === g.id;
+    const bonusHtml = (g.bon || []).map(b => `✦ ${b}`).join('<br>');
+    
+    return `<div class="guild-card${joined ? ' joined' : ''}" onclick="joinGuild('${g.id}')">
+      <div class="guild-emblem">${g.ico}</div>
+      <div class="guild-nm">${g.nm}</div>
+      <div class="guild-desc">${g.desc}</div>
+      <div class="guild-bon">${bonusHtml}</div>
+      <button class="btn${joined ? ' btn-jade' : ''}" onclick="event.stopPropagation();joinGuild('${g.id}')">${joined ? '✓ Member' : 'Join ('+g.cost+' Stones)'}</button>
+    </div>`;
+  }).join('');
+
+  // Handle the "Status" text at the top
+  const statusEl = document.getElementById('guild-status');
+  if (statusEl) {
+      if (!G.guild) {
+          statusEl.innerHTML = "Not affiliated with any guild.";
+          document.getElementById('guild-missions-pnl').style.display = 'none';
+      } else {
+          // Get guild name
+          const guildObj = GUILDS.find(g => g.id === G.guild);
+          const guildName = guildObj ? guildObj.nm : 'Unknown Guild';
+          
+          // Get rank data safely
+          const rIdx = G.guildRankIdx || 0;
+          const curRank = GUILD_RANKS[rIdx] || GUILD_RANKS[0];
+          const nextRank = GUILD_RANKS[rIdx + 1];
+          const currentExp = G.guildExp || 0;
+
+          let rankHtml = `Affiliated with: <b class="tg">${guildName}</b><br>Rank: <b class="tg">${curRank.title}</b>`;
+          
+          if (nextRank) {
+             const requiredExp = nextRank.reqExp;
+             const pct = Math.min(100, (currentExp / requiredExp) * 100);
+             rankHtml += ` | Next: ${nextRank.title} (${Math.floor(currentExp)}/${requiredExp} Exp)
+             <div class="pw"><div class="pf pf-spirit" style="width:${pct}%"></div></div>`;
+          } else {
+              rankHtml += ` | <b style="color:var(--gold3)">✨ Supreme Guild Master ✨</b>`;
+          }
+          statusEl.innerHTML = rankHtml;
+          document.getElementById('guild-missions-pnl').style.display = 'block';
+          renderGuildMissions();
+      }
+  }
+}
     // ══════════════════════════════════════════════════════════════
     //                    EXPANSION DATA TABLES
     // ══════════════════════════════════════════════════════════════
-    const WORLD_TIERS = [
+const WORLD_TIERS = [
       { id: 'mortal', nm: '凡界 The Mortal Lands', qiDensity: 1.0, unlockRealm: 0, color: '#8a6400', desc: 'Where all cultivators begin. Qi is sparse but opportunity abounds.' },
-      { id: 'middle', nm: '中天 The Middle Heavens', qiDensity: 3.5, unlockRealm: 3, color: '#3455a0', desc: 'Dense spiritual Qi suffuses every breath. Danger and treasure multiply.' },
-      { id: 'divine', nm: '神界 The Divine Realm', qiDensity: 12.0, unlockRealm: 6, color: '#b85020', desc: 'Reality trembles with divine Qi. Only sovereigns dare walk here.' },
+      { id: 'middle', nm: '中天 The Middle Heavens', qiDensity: 3.5, unlockRealm: 12, color: '#3455a0', desc: 'Dense spiritual Qi suffuses every breath. Danger and treasure multiply.' },
+      { id: 'divine', nm: '神界 The Divine Realm', qiDensity: 12.0, unlockRealm: 21, color: '#b85020', desc: 'Reality trembles with divine Qi. Only sovereigns dare walk here.' },
+      { id: 'saint', nm: '圣界 The Saint Realm', qiDensity: 50.0, unlockRealm: 25, color: '#ff69b4', desc: 'A realm of absolute purity. Only Saints can endure its pressure.' },
+      { id: 'god', nm: '神域 The God Domain', qiDensity: 250.0, unlockRealm: 30, color: '#00ffff', desc: 'The dwelling of True Gods. Reality bends to your will.' },
+      { id: 'chaos', nm: '混沌 Primordial Chaos', qiDensity: 1500.0, unlockRealm: 47, color: '#ff00ff', desc: 'The origin of all things. Infinite danger, infinite power.' }
     ];
     const NODE_MAP = {
       spirit_forest: { id: 'spirit_forest', nm: '灵木森林 Spirit Forest', tier: 0, ico: '🌲', x: 18, y: 32, desc: 'Ancient trees that absorbed Qi for millennia. Spirit herbs grow thick here.', encounters: [{ type: 'herb', w: 40, ico: '🌿', nm: 'Herb Patch', rwd: { herb: 'qiGrass', min: 2, max: 5 } }, { type: 'combat', w: 35, ico: '⚔️', nm: 'Wild Wolf Spirit', enemy: 'wolf' }, { type: 'event', w: 15, ico: '📜', nm: 'Broken Stone Tablet', rwd: { stones: 30 } }, { type: 'treasure', w: 10, ico: '💎', nm: 'Buried Cache', rwd: { stones: 80, gold: 5 } }], links: ['iron_peak', 'misty_lake'], unlockRealm: 0 },
@@ -3542,6 +3893,9 @@ function toggleMusic() {
       void_rift: { id: 'void_rift', nm: '虚空裂缝 Void Rift', tier: 1, ico: '🌌', x: 68, y: 58, desc: 'A tear in space. Void Qi seeps through — powerful and dangerous.', encounters: [{ type: 'combat', w: 45, ico: '⚔️', nm: 'Void Wraith', enemy: 'void_wraith' }, { type: 'herb', w: 20, ico: '🌌', nm: 'Void Bloom Field', rwd: { herb: 'voidBloom', min: 2, max: 3 } }, { type: 'event', w: 25, ico: '🌀', nm: 'Space Insight', rwd: { dao: 'void', pts: 80 } }, { type: 'treasure', w: 10, ico: '💎', nm: 'Void Crystal', rwd: { stones: 2000 } }], links: ['heaven_gate', 'jade_pavilion'], unlockRealm: 4 },
       divine_threshold: { id: 'divine_threshold', nm: '神界门槛 Divine Threshold', tier: 2, ico: '🌟', x: 88, y: 22, desc: 'The edge of the Divine Realm. Even breathing here is cultivation.', encounters: [{ type: 'combat', w: 60, ico: '⚔️', nm: 'Divine Beast', enemy: 'divine_beast' }, { type: 'event', w: 25, ico: '☀️', nm: 'Divine Qi Pillar', rwd: { qi: 50000 } }, { type: 'treasure', w: 15, ico: '🌟', nm: 'Celestial Material', rwd: { stones: 10000, gold: 500 } }], links: ['jade_pavilion', 'heavenly_palace'], unlockRealm: 6 },
       heavenly_palace: { id: 'heavenly_palace', nm: '天宫 Heavenly Palace', tier: 2, ico: '🏯', x: 82, y: 68, desc: 'Ruins of an ancient heavenly palace. The World Boss dwells within.', encounters: [{ type: 'boss', w: 40, ico: '👑', nm: 'World Boss: Celestial Tyrant', enemy: 'world_boss_ct' }, { type: 'combat', w: 30, ico: '⚔️', nm: 'Heaven Guard', enemy: 'heaven_guard' }, { type: 'treasure', w: 30, ico: '🌟', nm: 'Divine Relic Vault', rwd: { stones: 50000, gold: 2000 } }], links: ['divine_threshold'], unlockRealm: 6 },
+         saint_peak: { id: 'saint_peak', nm: '圣山 Saint Peak', tier: 3, ico: '🏔️', x: 105, y: 35, desc: 'The gathering place of ancient Saints.', encounters: [{ type: 'combat', w: 50, ico: '⚔️', nm: 'Fallen Saint', enemy: 'saint_beast' }, { type: 'herb', w: 30, ico: '🪷', nm: 'Saint Lotus Pond', rwd: { herb: 'saintLotus', min: 1, max: 2 } }, { type: 'treasure', w: 20, ico: '💠', nm: 'Saint Bone Relic', rwd: { stones: 200000, gold: 5000 } }], links: ['heavenly_palace', 'god_tomb'], unlockRealm: 13 },
+      god_tomb: { id: 'god_tomb', nm: '神墓 Grave of Gods', tier: 4, ico: '🏛️', x: 130, y: 55, desc: 'A graveyard of ancient deities. The energy here can shatter souls.', encounters: [{ type: 'combat', w: 60, ico: '⚔️', nm: 'God Wraith', enemy: 'god_wraith' }, { type: 'herb', w: 20, ico: '🍎', nm: 'God Fruit Tree', rwd: { herb: 'godFruit', min: 1, max: 1 } }, { type: 'event', w: 20, ico: '⚡', nm: 'Divine Revelation', rwd: { dao: 'creation', pts: 500 } }], links: ['saint_peak', 'chaos_rift'], unlockRealm: 17 },
+      chaos_rift: { id: 'chaos_rift', nm: '混沌渊 Chaos Rift', tier: 5, ico: '🕳️', x: 160, y: 40, desc: 'The edge of existence. Reality breaks down into raw energy.', encounters: [{ type: 'combat', w: 50, ico: '⚔️', nm: 'Chaos Entity', enemy: 'chaos_entity' }, { type: 'boss', w: 20, ico: '👑', nm: 'World Boss: Chaos Lord', enemy: 'world_boss_chaos' }, { type: 'herb', w: 30, ico: '🌿', nm: 'Primordial Root', rwd: { herb: 'chaosRoot', min: 1, max: 2 } }], links: ['god_tomb'], unlockRealm: 25 }
     };
     const NODE_ENEMIES = {
       wolf: { nm: '狼灵 Wolf Spirit', ico: '🐺', tier: 0, baseHp: 150, atk: 12, def: 5, loot: { stoneMin: 5, stoneMax: 20, coreKey: 'wolfCore', coreChance: 0.4 } },
@@ -3555,6 +3909,10 @@ function toggleMusic() {
       divine_beast: { nm: '神兽 Divine Beast', ico: '🦁', tier: 2, baseHp: 15000, atk: 400, def: 200, loot: { stoneMin: 3000, stoneMax: 8000, coreKey: 'immCore', coreChance: 0.22 } },
       heaven_guard: { nm: '天宫卫士 Heaven Guard', ico: '🛡️', tier: 2, baseHp: 25000, atk: 600, def: 350, loot: { stoneMin: 5000, stoneMax: 15000, coreKey: 'angelCore', coreChance: 0.15 } },
       world_boss_ct: { nm: '天霸 Celestial Tyrant', ico: '👑', tier: 2, baseHp: 500000, atk: 2000, def: 1000, loot: { stoneMin: 50000, stoneMax: 200000, coreKey: 'cosmCore', coreChance: 1.0 }, isWorldBoss: true },
+            saint_beast: { nm: '堕落圣兽 Fallen Saint Beast', ico: '🦚', tier: 3, baseHp: 5000000, atk: 25000, def: 15000, loot: { stoneMin: 100000, stoneMax: 300000, coreKey: 'cosmCore', coreChance: 0.5 } },
+      god_wraith: { nm: '神灵怨魂 God Wraith', ico: '👁️', tier: 4, baseHp: 50000000, atk: 120000, def: 80000, loot: { stoneMin: 1000000, stoneMax: 5000000, coreKey: 'cosmCore', coreChance: 0.8 } },
+      chaos_entity: { nm: '混沌魔物 Chaos Entity', ico: '🌪️', tier: 5, baseHp: 500000000, atk: 800000, def: 500000, loot: { stoneMin: 10000000, stoneMax: 50000000, coreKey: 'cosmCore', coreChance: 1.0 } },
+      world_boss_chaos: { nm: '混沌领主 Lord of Chaos', ico: '🌌', tier: 5, baseHp: 10000000000, atk: 5000000, def: 3000000, loot: { stoneMin: 500000000, stoneMax: 1000000000, coreKey: 'cosmCore', coreChance: 1.0 }, isWorldBoss: true }
     };
     const TECHNIQUES = {
       basic_atk: { nm: '直击 Basic Strike', ico: '⚔️', type: 'attack', cd: 0, dmgMult: 1.0, desc: 'A standard attack.' },
@@ -3571,11 +3929,17 @@ function toggleMusic() {
       { id: 'iron_zhao', nm: '铁拳 Iron Fist Zhao', title: 'Body Cultivator · 体修', ico: '💪', unlockRealm: 2, desc: 'A battle-scarred body cultivator who has never lost in close combat.', bon: 'Combat ATK +20%. Max HP +30%.', bonFn: (aff) => ({ cdmg: 0.1 + aff * 0.001, hp: 0.1 + aff * 0.002 }), giftItem: 'foundHrb', affinityMax: 100 },
       { id: 'xuan_tian', nm: '玄天 Elder Xuan Tian', title: 'Void Scholar · 虚空学者', ico: '🧙', unlockRealm: 4, desc: 'An ancient cultivator obsessed with space-time manipulation and forbidden arts.', bon: 'Space/Void Dao ×1.5. Node cooldown −30%.', bonFn: (aff) => ({ spaceMult: 0.2 + aff * 0.003, nodeCd: 0.3 }), giftItem: 'voidBloom', affinityMax: 100 },
       { id: 'divine_phoenix', nm: '凤凰 Divine Phoenix', title: 'Immortal Flame · 不死焰', ico: '🦅', unlockRealm: 6, desc: 'A reborn divine phoenix who recognised the Sovereign\'s destiny in flame.', bon: 'Flame Dao ×2. All stats +15% in Divine Realm.', bonFn: (aff) => ({ flameMult: 0.5 + aff * 0.01 }), giftItem: 'immoFlwr', affinityMax: 100 },
+            { id: 'saintess_lin', nm: '林圣女 Saintess Lin', title: 'Saint of Nine Heavens · 九天圣女', ico: '🪷', unlockRealm: 13, desc: 'A sovereign of the Saint realm. Her aura purifies all corruption.', bon: 'All Dao comprehension +100%. Breakthrough chance +15%.', bonFn: (aff) => ({ allD: 1.0 + aff * 0.02, brk: 0.15 }), giftItem: 'saintLotus', affinityMax: 100 },
+      { id: 'god_valkyrie', nm: '女武神 God Valkyrie', title: 'War Deity · 战争女神', ico: '🗡️', unlockRealm: 17, desc: 'Born from the concept of war itself in the God Realm.', bon: 'Combat ATK x3. Evasion +40%.', bonFn: (aff) => ({ cdmg: 2.0 + aff * 0.05, ev: 0.4 }), giftItem: 'godFruit', affinityMax: 100 },
+      { id: 'chaos_spirit', nm: '混沌灵 Primordial Spirit', title: 'First Born · 初生灵', ico: '👁️', unlockRealm: 25, desc: 'A fragment of the universe before the big bang.', bon: 'All Stats x5. Ignore 50% Enemy Defense.', bonFn: (aff) => ({ cdmg: 4.0 + aff * 0.1, hp: 4.0 + aff * 0.1, defIgnore: 0.5 }), giftItem: 'chaosRoot', affinityMax: 100 },
     ];
     const WORLD_BOSSES = [
       { id: 'iron_titan', nm: '铁魔王 Iron Titan Demon', ico: '🗿', tier: 0, hp: 50000, atk: 250, def: 180, unlockRealm: 2, desc: 'A titan demon that claimed the Mortal Lands. Its iron body deflects ordinary techniques.', rwd: { stones: 5000, gold: 200, coreKey: 'devilCore', coreAmt: 3 }, respawn: 300000 },
-      { id: 'jade_sovereign', nm: '碧王 Jade Sovereign Beast', ico: '🐲', tier: 1, hp: 500000, atk: 1200, def: 800, unlockRealm: 4, desc: 'An ancient jade dragon sleeping in the Middle Heavens. Its roar alone shatters arrays.', rwd: { stones: 50000, gold: 2000, coreKey: 'voidCore', coreAmt: 5 }, respawn: 600000 },
-      { id: 'celestial_tyrant', nm: '天霸 Celestial Tyrant', ico: '👑', tier: 2, hp: 5000000, atk: 8000, def: 5000, unlockRealm: 6, desc: 'Supreme ruler of the old Divine Realm. Its aura alone crushes mountains.', rwd: { stones: 500000, gold: 20000, coreKey: 'cosmCore', coreAmt: 10 }, respawn: 900000 },
+      { id: 'jade_sovereign', nm: '碧王 Jade Sovereign Beast', ico: '🐲', tier: 1, hp: 500000, atk: 1200, def: 800, unlockRealm: 14, desc: 'An ancient jade dragon sleeping in the Middle Heavens. Its roar alone shatters arrays.', rwd: { stones: 50000, gold: 2000, coreKey: 'voidCore', coreAmt: 5 }, respawn: 600000 },
+      { id: 'celestial_tyrant', nm: '天霸 Celestial Tyrant', ico: '👑', tier: 2, hp: 5000000, atk: 8000, def: 5000, unlockRealm: 23, desc: 'Supreme ruler of the old Divine Realm. Its aura alone crushes mountains.', rwd: { stones: 500000, gold: 20000, coreKey: 'cosmCore', coreAmt: 10 }, respawn: 900000 },
+      { id: 'saint_emperor', nm: '圣帝 The Saint Emperor', ico: '🧎', tier: 3, hp: 50000000, atk: 80000, def: 40000, unlockRealm: 28, desc: 'A corrupted saint who refuses to pass on to the God Realm.', rwd: { stones: 5000000, gold: 100000, coreKey: 'cosmCore', coreAmt: 50 }, respawn: 1800000 },
+      { id: 'god_king', nm: '废墟神王 God King of Ruins', ico: '🔱', tier: 4, hp: 1000000000, atk: 500000, def: 250000, unlockRealm: 32, desc: 'An ancient deity protecting the tomb of his pantheon.', rwd: { stones: 50000000, gold: 500000, coreKey: 'cosmCore', coreAmt: 200 }, respawn: 3600000 },
+      { id: 'chaos_lord', nm: '混沌领主 Lord of Primordial Chaos', ico: '🌌', tier: 5, hp: 50000000000, atk: 5000000, def: 3000000, unlockRealm: 49, desc: 'The embodiment of the universe before creation.', rwd: { stones: 1000000000, gold: 5000000, coreKey: 'cosmCore', coreAmt: 1000 }, respawn: 7200000 }
     ];
 
     // ══════════════════════════════════════════════════════════════
@@ -4611,10 +4975,11 @@ function toggleMusic() {
     // Get maximum Qi for a specific realm
     function getRealmMaxQi(realmIdx) {
       if (realmIdx < REALMS.length) return REALMS[realmIdx].mq;
-      // For realms beyond the base list, escalate exponentially
-      const lastRealm = REALMS[REALMS.length - 1];
-      const scale = getRealmScaling(realmIdx);
-      return lastRealm.mq * scale.maxQiMult;
+      // Use True Immortal (index 10, mq = 1e12) as the finite base for extended realms.
+      // Golden Immortal (index 11) has mq = Infinity, so we skip it as a base.
+      const baseMq = REALMS[REALMS.length - 2].mq; // 1e12
+      const extraIdx = realmIdx - REALMS.length + 1;
+      return Math.floor(baseMq * Math.pow(8, extraIdx));
     }
 
     // Get breakthrough chance for a realm
@@ -4787,6 +5152,7 @@ function toggleMusic() {
       manualSynergies: [], // Active synergies detected
       shopBon: { stMult: 1, goldMult: 1, pq: 0, ev: 0, loot: 1, cdmg: 1, shopDisc: 1, stGen: 0, coreBonus: 0 },
       inv: [], ulog: [], saveTime: null,
+      equipped: { weapon: null, armor: null, accessory: null },
       auto: { med: true, brk: false, gath: false, ref: false, dao: true, bat: false, mis: false, physique: false, mind: false },
       tribShield: 0,
       realmSubstage: 0,
@@ -4806,6 +5172,7 @@ function toggleMusic() {
       // ── EXPANSION STATE ──
       worldTier: 0,
       currentNode: 'spirit_forest',
+      mapView: { x: 0, y: 0, scale: 1, isDragging: false, lastX: 0, lastY: 0 },
       exploredNodes: [],
       nodeEncounterCooldown: 0,
       companions: {},
@@ -4936,9 +5303,10 @@ function getStg(id) {
 }
     function trainGain(id) {
       const t = G.talent?.dm || 1;
-      const r = (G.root?.af?.[id] || 0) + (G.root?.af?.allD || 0) + (G.root?.af?.allD ? 1 : 0) || 1;
-      const rBonus = Math.max(1, r);
-      const man = G.manBon?.[id] || 1;
+      const specificAf = G.root?.af?.[id] || 0;
+      const allDAf = G.root?.af?.allD || 0;
+      const rBonus = Math.max(1, 1 + specificAf + allDAf);
+      const man = G.manBon?.daos?.[id] ? (1 + G.manBon.daos[id]) : 1;
       return t * rBonus * man * timeM() * (1 + (G.arrs.r.bon || 0)) * 0.5;
     }
     function getElementalCombatMult() {
@@ -5043,18 +5411,18 @@ function getStg(id) {
     function getRealmSubstage() { return G.realmSubstage || 0; }
     function getRealmMaxSubstage() { return 9; }
     function getRealmPeak() { return getRealmSubstage() >= getRealmMaxSubstage(); }
-    function getRealmProgress() { const rm = REALMS[G.rIdx]; if (!rm) return 0; const baseMq = rm.mq; const substageMq = baseMq / 10; return Math.min(1, G.qi / (substageMq * (getRealmSubstage() + 1))); }
+    function getRealmProgress() { const mq = getRealmMaxQi(G.rIdx); if (!mq || !isFinite(mq)) return 0; const substageMq = mq / 10; return Math.min(1, G.qi / (substageMq * (getRealmSubstage() + 1))); }
     function doBreak() {
       const substage = getRealmSubstage();
       const peak = getRealmPeak();
       if (peak) {
-        if (G.rIdx >= REALMS.length - 1) { notify('Already at max realm!'); return; }
-        const rm = REALMS[G.rIdx];
+        if (G.rIdx >= FULL_REALM_INDEX.length - 1) { notify('Already at max realm!'); return; }
         const synergy = getThreefoldSynergy();
-        const chance = Math.min(0.95, (rm.bb || 0.6) + (G.brkBonus || 0) + (npcBon('brk') || 0) * synergy.breakthroughSuccess);
+        const bbChance = getRealmBreakthroughChance(G.rIdx);
+        const chance = Math.min(0.95, (bbChance + (G.brkBonus || 0) + (npcBon('brk') || 0)) * synergy.breakthroughSuccess);
         G.qi = Math.floor(G.mqi * 0.05);
         if (Math.random() < chance) {
-          if (rm.trib) { startTrib(G.rIdx + 1); }
+          if (realmHasTribulation(G.rIdx + 1)) { startTrib(G.rIdx + 1); }
           else { advanceRealm(); }
         } else {
           const loss = Math.floor(G.mhp * (0.15 + G.rIdx * 0.015));
@@ -5070,25 +5438,32 @@ function getStg(id) {
           notify('Breakthrough failed! Accumulate more Qi and try again.');
         }
       } else {
-        const rm = REALMS[G.rIdx];
-        const substageMq = rm.mq / 10;
+        const curMqi = getRealmMaxQi(G.rIdx);
+        const substageMq = curMqi / 10;
         if (G.qi < substageMq * (substage + 1)) { notify(`Need more Qi for substage ${substage + 1}!`); return; }
         G.realmSubstage = (G.realmSubstage || 0) + 1;
         G.qi = Math.floor(G.qi * 0.1);
-        addUL(`★ Substage ${G.realmSubstage} reached in ${rm.nm}!`);
-        notify(`★ Substage ${G.realmSubstage}/9 — ${rm.nm}`);
+        const realmNm = FULL_REALM_INDEX[G.rIdx]?.nm || REALMS[G.rIdx]?.nm || `Realm ${G.rIdx}`;
+        addUL(`★ Substage ${G.realmSubstage} reached in ${realmNm}!`);
+        notify(`★ Substage ${G.realmSubstage}/9 — ${realmNm}`);
       }
       updateUI();
     }
     function advanceRealm() {
       G.rIdx++;
       G.realmSubstage = 0;
-      const rm = REALMS[G.rIdx];
-      G.mqi = rm.mq; G.brkBonus = 0;
+      // Use FULL_REALM_INDEX for display name (covers all 65 realms),
+      // fall back to REALMS for the early Chinese names, then getRealmMaxQi for the threshold.
+      const fri = FULL_REALM_INDEX[G.rIdx];
+      const rm = REALMS[G.rIdx]; // may be undefined past index 11
+      const realmNm = fri?.nm || rm?.nm || `Realm ${G.rIdx}`;
+      const realmSb = rm?.sb || fri?.group || '';
+      G.mqi = getRealmMaxQi(G.rIdx);
+      G.brkBonus = 0;
       const physBonus = getPhysiqueBonus();
       G.mhp = Math.floor(100 * bodyHM() * (1 + G.rIdx * 0.25) * physBonus.hp); G.php = G.mhp;
-      addUL(`★ BREAKTHROUGH! Ascended to ${rm.nm} · ${rm.sb}`);
-      notify(`★ Realm Breakthrough — ${rm.nm}!`);
+      addUL(`★ BREAKTHROUGH! Ascended to ${realmNm}${realmSb ? ' · ' + realmSb : ''}`);
+      notify(`★ Realm Breakthrough — ${realmNm}!`);
       // Soul Power gain from breakthrough
       G.soulPower = (G.soulPower || 0) + 10;
       addUL(`✨ +10 Soul Power from breakthrough!`);
@@ -5149,7 +5524,7 @@ function getStg(id) {
           notify(`✦ ${dao.nm} has awakened within you!`);
         }
       });
-      if (G.rIdx >= REALMS.length - 2) G.phoenixRdy = true;
+      if (G.rIdx >= FULL_REALM_INDEX.length - 2) G.phoenixRdy = true;
     }
 
     // ══════════════════════════════════════════════════════════════
@@ -5201,26 +5576,37 @@ function getStg(id) {
       const el = $('at-' + key); if (el) el.classList.toggle('on', G.auto[key]);
       notify(G.auto[key] ? `▶ Auto-${key} enabled` : `⏸ Auto-${key} disabled`);
     }
-    function processAutos() {
-      if (G.auto.brk && G.qi >= G.mqi && G.rIdx < REALMS.length - 1 && !G.combat.active && G.combat.phase === 'idle') { doBreak(); }
-      if (G.auto.gath && !G.gTask && G.autoHerb) { gatherHerb(G.autoHerb); }
-      if (G.auto.ref && !G.rTask && G.autoPill) { refinePill(G.autoPill); }
-      if (G.auto.mis) { autoCollectMissions(); }
-    }
-
+function processAutos() {
+  if (G.auto.brk && G.qi >= G.mqi && G.rIdx < FULL_REALM_INDEX.length - 1 && !G.combat.active) { 
+    doBreak(); 
+  }
+  // Auto Gather
+  if (G.auto.gath && !G.gTask && G.autoHerb && G.autoHerb !== 'null') { 
+    gatherHerb(G.autoHerb); 
+  }
+  // Auto Refine
+  if (G.auto.ref && !G.rTask && G.autoPill && G.autoPill !== 'null') { 
+    refinePill(G.autoPill); 
+  }
+  if (G.auto.mis) { 
+    autoCollectMissions(); 
+  }
+}
     // ══════════════════════════════════════════════════════════════
     //                    HERBS & ALCHEMY
     // ══════════════════════════════════════════════════════════════
-    function gatherHerb(herbKey) {
-      if (G.gTask) { if (!G.auto.gath) notify('Already gathering!'); return; }
-      const hd = HERBS.find(h => h.k === herbKey); if (!hd) return;
-      if (G.rIdx < hd.rR) { notify(`Requires ${REALMS[hd.rR]?.nm || 'higher realm'}!`); return; }
-      const sp = spaceG();
-      const dur = Math.floor(hd.time * 1000 * (sp.mult ?? 1) / Math.max(0.1, G.talent?.cm || 1));
-      G.gTask = { herb: herbKey, dur, el: 0 };
-      const gpw = $('gpw'); if (gpw) gpw.style.display = 'block';
-      if (!G.auto.gath) notify(`Gathering ${hd.nm}...`);
-    }
+function gatherHerb(herbKey) {
+  if (G.gTask) return;
+  const hd = HERBS.find(h => h.k === herbKey);
+  if (!hd) return;
+  
+  // Use hd.t (milliseconds) and ensure it's not 0
+  const duration = hd.t || 5000; 
+  G.gTask = { herb: herbKey, dur: duration, el: 0 };
+  
+  if ($('gpw')) $('gpw').style.display = 'block';
+  notify(`Gathering ${hd.nm}...`);
+}
     function setAutoHerb(key) {
       G.autoHerb = (key === 'null' || key === null) ? null : key;
       if (G.rIdx >= 1) updHerbs();
@@ -5231,37 +5617,45 @@ function getStg(id) {
       notify(G.autoPill ? `Auto-refine: ${(PILLS[G.autoPill] || CPILLS[G.autoPill])?.nm || id}` : 'Auto-refine disabled');
     }
     function refinePill(pillId) {
-      if (G.rTask) { if (!G.auto.ref) notify('Already refining!'); return; }
-      const def = PILLS[pillId] || CPILLS[pillId]; if (!def) return;
-      if (G.rIdx < def.rR) { notify('Realm too low for this pill!'); return; }
-      for (const [hk, amt] of Object.entries(def.cost)) {
-        if ((G.herbs[hk] || 0) < amt) { if (!G.auto.ref) notify(`Not enough ${HERBS.find(h => h.k === hk)?.nm || hk}!`); return; }
-      }
-      for (const [hk, amt] of Object.entries(def.cost)) G.herbs[hk] -= amt;
-      const spd = G.root?.af?.alch || 1;
-      G.rTask = { pill: pillId, dur: Math.floor(def.t / spd), el: 0 };
-      const rpw = $('rpw'); if (rpw) rpw.style.display = 'block';
-      if (!G.auto.ref) notify(`Refining ${def.nm}...`);
+  if (G.rTask) { if (!G.auto.ref) notify('Already refining!'); return; }
+  const def = PILLS[pillId] || CPILLS[pillId]; if (!def) return;
+  if (G.rIdx < def.rR) { notify('Realm too low!'); return; }
+  
+  for (const [hk, amt] of Object.entries(def.cost)) {
+    if ((G.herbs[hk] || 0) < amt) { 
+      if (!G.auto.ref) notify(`Missing ${HERBS.find(h => h.k === hk)?.nm || hk}`); 
+      return; 
     }
-    function completePill(pillId) {
-      const def = PILLS[pillId] || CPILLS[pillId]; if (!def) return;
-      G.rTask = null; const rpw = $('rpw'); if (rpw) rpw.style.display = 'none'; sw('rbar', 0);
-      const qTotal = (G.shopBon.pq || 0) + (G.arrs.a.bon || 0) + flameB() + (npcBon('pq') || 0) + (G.root?.af?.pq || 0);
-      const roll = Math.random();
-      let qual = 0;
-      if (roll < 0.05 + qTotal * 0.5) qual = 3;
-      else if (roll < 0.2 + qTotal * 0.35) qual = 2;
-      else if (roll < 0.5 + qTotal * 0.15) qual = 1;
-      const qNm = ['Low', 'Medium', 'High', 'Peerless'][qual];
-      const mult = 1 + qual * 0.5;
-      applyPill(pillId, mult);
-      // Alchemist faction gain from pill creation
-      const alcGain = Math.floor(10 + qual * 5);
-      G.factionRep.alchemists = (G.factionRep.alchemists || 0) + alcGain;
-      addUL(`✦ Refined: ${def.nm} [${qNm} Quality ×${mult.toFixed(1)}] · 🧪 +${alcGain} Alchemist rep`);
-      if (!G.auto.ref) notify(`${def.nm} — ${qNm} Quality!`);
-      if (G.rIdx >= 1) { updPills(); } updateUI();
-    }
+  }
+  
+  for (const [hk, amt] of Object.entries(def.cost)) G.herbs[hk] -= amt;
+  const spd = G.root?.af?.alch || 1;
+  // FIX: Ensure duration is set correctly
+  G.rTask = { pill: pillId, dur: Math.floor(def.t / spd), el: 0 };
+  const rpw = $('rpw'); if (rpw) rpw.style.display = 'block';
+  if (!G.auto.ref) notify(`Refining ${def.nm}...`);
+}
+   function completePill(pillId) {
+  const def = PILLS[pillId] || CPILLS[pillId]; if (!def) return;
+  G.rTask = null; 
+  const rpw = $('rpw'); if (rpw) rpw.style.display = 'none'; 
+  sw('rbar', 0);
+
+  // ADD TO INVENTORY
+  addInv({
+    id: pillId,
+    nm: def.nm,
+    ico: '💊',
+    type: 'PILL',
+    desc: def.ef,
+    qty: 1
+  });
+
+  G.factionRep.alchemists = (G.factionRep.alchemists || 0) + 10;
+  if (!G.auto.ref) notify(`✦ ${def.nm} added to inventory`);
+  updateUI();
+}
+
     function applyPill(pillId, mult = 1) {
       const def = PILLS[pillId] || CPILLS[pillId]; if (!def) return;
       const eff = def.ef || '';
@@ -5999,23 +6393,23 @@ function getStg(id) {
         addUL(`💎 Gained ${item.reward.stones} spirit stones from faction!`);
       }
       if (item.reward.daoGain) {
-        if (!G.daos) G.daos = {};
-        if (!G.daos[item.reward.daoGain]) G.daos[item.reward.daoGain] = { stage: 0, points: 0 };
-        G.daos[item.reward.daoGain].points += item.reward.amt || 0;
-        addUL(`🌟 ${factionId} faction grant ${item.reward.amt} points in ${item.reward.daoGain}!`);
+        const daoId = item.reward.daoGain;
+        if (!G.daos[daoId]) G.daos[daoId] = { s: 0 };
+        G.daos[daoId].s = (G.daos[daoId].s || 0) + (item.reward.amt || 0);
+        addUL(`🌟 ${factionId} faction granted ${item.reward.amt} points in ${daoId}!`);
       }
       if (item.reward.discount) {
-        G.shopDiscount = (G.shopDiscount || 0) + item.reward.discount;
+        G.shopBon.shopDisc = Math.max(0.5, (G.shopBon.shopDisc || 1) - item.reward.discount);
         addUL(`💰 Shop discount increased by ${Math.floor(item.reward.discount * 100)}%!`);
       }
       if (item.reward.manual) {
-        if (!G.manuals) G.manuals = [];
-        G.manuals.push({ id: item.reward.manual, level: 1 });
+        const mid = item.reward.manual;
+        if (!G.manuals[mid]) G.manuals[mid] = { vol: 0 };
         addUL(`📖 Learned exclusive ${factionId} manual!`);
       }
       if (item.reward.companion) {
-        if (!G.companions) G.companions = [];
-        G.companions.push({ id: factionId + '_ally', name: item.nm, power: item.reward.power || 1 });
+        const cid = factionId + '_ally';
+        if (!G.companions[cid]) G.companions[cid] = { unlocked: true, affinity: 0, active: false };
         addUL(`👥 Gained a ${factionId} faction ally!`);
       }
       
@@ -6129,21 +6523,51 @@ function getStg(id) {
     // ══════════════════════════════════════════════════════════════
     //                    GUILDS
     // ══════════════════════════════════════════════════════════════
-    function renderGuilds() {
-      const con = $('guild-list'); if (!con) return;
-      con.innerHTML = GUILDS.map(g => {
-        const joined = G.guild === g.id;
-        return `<div class="guild-card${joined ? ' joined' : ''}" onclick="joinGuild('${g.id}')">
+function renderGuildMissions() {
+    const con = $('guild-missions');
+    if (!con || !G.guild) return;
+
+    // FIX: Initialize variables if they are missing from an old save
+    if (G.guildExp === undefined || isNaN(G.guildExp)) G.guildExp = 0;
+    if (G.guildRankIdx === undefined || isNaN(G.guildRankIdx)) G.guildRankIdx = 0;
+  con.innerHTML = GUILDS.map(g => {
+    const joined = G.guild === g.id;
+    // Safety check: Use (g.bon || []) to prevent crashing
+    const bonusHtml = (g.bon || []).map(b => `✦ ${b}`).join('<br>');
+    
+    return `<div class="guild-card${joined ? ' joined' : ''}" onclick="joinGuild('${g.id}')">
       <div class="guild-emblem">${g.ico}</div>
       <div class="guild-nm">${g.nm}</div>
       <div class="guild-desc">${g.desc}</div>
-      <div class="guild-bon">${g.bon.map(b => `✦ ${b}`).join('<br>')}</div>
-      <button class="btn${joined ? ' btn-jade' : ''}" onclick="event.stopPropagation();joinGuild('${g.id}')">${joined ? '✓ Member' : 'Join (500 Stones)'}</button>
+      <div class="guild-bon">${bonusHtml}</div>
+      <button class="btn${joined ? ' btn-jade' : ''}" onclick="event.stopPropagation();joinGuild('${g.id}')">${joined ? '✓ Member' : 'Join ('+g.cost+' Stones)'}</button>
     </div>`;
-      }).join('');
-      $('guild-status').textContent = G.guild ? `Guild Member: ${GUILDS.find(g => g.id === G.guild)?.nm || 'Unknown'}` : 'Not affiliated with any guild.';
-      $('guild-missions-pnl').style.display = G.guild ? 'block' : 'none';
-    }
+  }).join('');
+
+  // Rank Display logic
+  const curRank = GUILD_RANKS[G.guildRankIdx || 0] || GUILD_RANKS[0];
+  const nextRank = GUILD_RANKS[(G.guildRankIdx || 0) + 1];
+  const guildName = GUILDS.find(g => g.id === G.guild)?.nm || 'None';
+  
+  let rankHtml = `Affiliated with: <b class="tg">${guildName}</b><br>`;
+  if (G.guild) {
+      rankHtml += `Rank: <b class="tg">${curRank.title}</b>`;
+      if (nextRank) {
+       const currentExp = G.guildExp || 0;
+const requiredExp = nextRank.reqExp;
+const pct = Math.min(100, (currentExp / requiredExp) * 100);
+
+// Update the progress bar visually
+rankHtml += ` | Next: ${nextRank.title} (${Math.floor(currentExp)}/${requiredExp} Exp)
+<div class="pw"><div class="pf pf-spirit" style="width:${pct}%"></div></div>`;
+      } else {
+          rankHtml += ` | <b style="color:var(--gold3)">✨ Supreme Guild Master ✨</b>`;
+      }
+  }
+  $('guild-status').innerHTML = rankHtml;
+  $('guild-missions-pnl').style.display = G.guild ? 'block' : 'none';
+  if (G.guild) renderGuildMissions();
+}
     function joinGuild(id) {
       if (G.guild === id) { notify('Already a member!'); return; }
       if (G.guild) { notify('Leave your current guild first? (Currently not supported — choose wisely!)'); return; }
@@ -6161,7 +6585,160 @@ function getStg(id) {
       if (g.joinBon.stGen) G.shopBon.stGen = (G.shopBon.stGen || 0) + g.joinBon.stGen;
       addUL(`✦ Joined: ${g.nm}!`); notify(`✦ Joined ${g.nm}! Bonuses applied.`);
       renderGuilds(); updateUI();
+          if (G.guild) renderGuildMissions();
     }
+
+const GUILD_MISSION_TEMPLATES = {
+    alch_asso: [
+        { id: 'am1', nm: 'Refine Qi-Gathering Pills', dur: 10000, minRealm: 0, rwd: { stones: 50, gold: 2 } },
+        { id: 'am2', nm: 'Identify Ghost-Fane Herbs', dur: 45000, minRealm: 2, rwd: { stones: 200, gold: 10 } },
+        { id: 'am3', nm: 'Stabilize an Alchemical Cauldron', dur: 120000, minRealm: 4, rwd: { stones: 800, gold: 30 } },
+        { id: 'am4', nm: 'Refine Nine-Revolution Soul Pill', dur: 600000, minRealm: 7, rwd: { stones: 5000, gold: 200 } },
+        { id: 'am5', nm: 'Create a Pseudo-Immortal Elixir', dur: 1800000, minRealm: 10, rwd: { stones: 25000, gold: 1000 } }
+    ],
+    war_pav: [
+        { id: 'wm1', nm: 'Hunt Low-Tier Spirit Wolves', dur: 15000, minRealm: 0, rwd: { stones: 60, rep: 5 } },
+        { id: 'wm2', nm: 'Clear a Demonic Outpost', dur: 60000, minRealm: 3, rwd: { stones: 400, rep: 25 } },
+        { id: 'wm3', nm: 'Assassinate a Rogue Elder', dur: 300000, minRealm: 5, rwd: { stones: 2000, gold: 80 } },
+        { id: 'wm4', nm: 'Slay a Nascent-Soul Beast', dur: 900000, minRealm: 8, rwd: { stones: 10000, gold: 500 } },
+        { id: 'wm5', nm: 'Suppress a Continental War', dur: 3600000, minRealm: 12, rwd: { stones: 100000, gold: 5000 } }
+    ],
+    merch: [
+        { id: 'mm1', nm: 'Exchange Spirit Stone Scraps', dur: 5000, minRealm: 0, rwd: { stones: 30, gold: 1 } },
+        { id: 'mm2', nm: 'Open a New Trade Route', dur: 180000, minRealm: 2, rwd: { stones: 1200, gold: 50 } },
+        { id: 'mm3', nm: 'Monopolize the Jade Market', dur: 450000, minRealm: 5, rwd: { stones: 6000, gold: 250 } },
+        { id: 'mm4', nm: 'Establish an Inter-Planetary Bank', dur: 1200000, minRealm: 9, rwd: { stones: 40000, gold: 2000 } }
+    ],
+    shadow_pav: [
+        { id: 'sm1', nm: 'Spy on a Mortal Kingdom', dur: 20000, minRealm: 1, rwd: { stones: 150, gold: 10 } },
+        { id: 'sm2', nm: 'Steal a Sect Inscription', dur: 90000, minRealm: 3, rwd: { stones: 700, gold: 40 } },
+        { id: 'sm3', nm: 'Infiltrate the Heavens', dur: 600000, minRealm: 6, rwd: { stones: 5000, gold: 300 } }
+    ],
+    array_hall: [
+        { id: 'ah1', nm: 'Draw Spirit-Gathering Runes', dur: 30000, minRealm: 1, rwd: { stones: 200, gold: 5 } },
+        { id: 'ah2', nm: 'Fix a Broken Teleport Array', dur: 150000, minRealm: 4, rwd: { stones: 1500, gold: 60 } },
+        { id: 'ah3', nm: 'Construct a World-Sealing Array', dur: 1000000, minRealm: 8, rwd: { stones: 15000, gold: 800 } }
+    ],
+    beast_tamer: [
+        { id: 'bt1', nm: 'Feed the Sect Mounts', dur: 12000, minRealm: 0, rwd: { stones: 40, gold: 1 } },
+        { id: 'bt2', nm: 'Tame a Thunder-Winged Tiger', dur: 200000, minRealm: 4, rwd: { stones: 1800, gold: 100 } },
+        { id: 'bt3', nm: 'Subdue a Primordial Phoenix', dur: 1500000, minRealm: 11, rwd: { stones: 50000, gold: 3000 } }
+    ]
+};
+function renderGuildMissions() {
+    const con = $('guild-missions');
+    if (!con || !G.guild) return;
+
+    // FIX: Initialize variables if they are missing from an old save
+    if (G.guildExp === undefined || isNaN(G.guildExp)) G.guildExp = 0;
+    if (G.guildRankIdx === undefined || isNaN(G.guildRankIdx)) G.guildRankIdx = 0;
+    
+    // Ensure guildMissions exists
+    if (!G.guildMissions) G.guildMissions = [];
+
+    // If the list is empty or the guild changed, populate it
+    if (G.guildMissions.length === 0 || G._lastGuild !== G.guild) {
+        G.guildMissions = (GUILD_MISSION_TEMPLATES[G.guild] || []).map(m => ({ ...m, end: 0, status: 'idle' }));
+        G._lastGuild = G.guild;
+    }
+
+    const now = Date.now();
+    // Added (G.guildMissions || []) as an extra safety measure
+    con.innerHTML = (G.guildMissions || []).map((m, i) => {
+        const isLocked = G.rIdx < m.minRealm;
+        let btn = '';
+
+        if (isLocked) {
+            btn = `<button class="btn" disabled>🔒 Realm ${m.minRealm} Req.</button>`;
+        } else if (m.status === 'idle') {
+            btn = `<button class="btn btn-jade" onclick="startGuildMission(${i})">Start Mission</button>`;
+        } else if (m.status === 'running') {
+            const remain = Math.max(0, Math.ceil((m.end - now) / 1000));
+            // Check if complete right now in UI
+            if (remain <= 0) {
+                m.status = 'ready';
+                btn = `<button class="btn btn-gold btn-pulse" onclick="completeGuildMission(${i})">Claim Reward</button>`;
+            } else {
+                btn = `<button class="btn" disabled>⌛ ${remain}s</button>`;
+            }
+        } else {
+            btn = `<button class="btn btn-gold btn-pulse" onclick="completeGuildMission(${i})">Claim Reward</button>`;
+        }
+
+        return `<div class="mission-card" style="opacity: ${isLocked ? 0.6 : 1}">
+            <div class="mission-nm">${m.nm} ${isLocked ? '(Locked)' : ''}</div>
+            <div class="mission-rwd">Reward: ${m.rwd.stones} Stones | Realm: ${m.minRealm}+</div>
+            <div class="br mt8">${btn}</div>
+        </div>`;
+    }).join('');
+}
+
+function startGuildMission(idx) {
+    const m = G.guildMissions[idx];
+    if (m.status !== 'idle') return;
+    m.status = 'running';
+    m.end = Date.now() + m.dur;
+    notify("Mission started!");
+    renderGuildMissions();
+}
+
+function completeGuildMission(idx) {
+    const m = G.guildMissions[idx];
+    if (!m || m.status !== 'ready') return;
+
+    // 1. Initialization Safety (Fixes the NaN issue)
+    if (typeof G.guildExp !== 'number' || isNaN(G.guildExp)) G.guildExp = 0;
+    if (typeof G.guildRankIdx !== 'number' || isNaN(G.guildRankIdx)) G.guildRankIdx = 0;
+
+    // 2. Calculate Rewards based on Rank Multiplier
+    const currentRankData = GUILD_RANKS[G.guildRankIdx] || GUILD_RANKS[0];
+    const rankMult = currentRankData.bonusMult || 1.0;
+    
+    const stonesReward = Math.floor(m.rwd.stones * rankMult);
+    const goldReward = Math.floor((m.rwd.gold || 0) * rankMult);
+
+    // 3. THE EXP CODE: Award 1 Exp for every 1 second of mission duration
+    const expGain = Math.floor(m.dur / 1000); 
+    G.guildExp += expGain; // This line actually adds the exp to your character
+
+    // 4. Apply Resources
+    G.st += stonesReward;
+    G.gold += goldReward;
+    if (m.rwd.rep) G.rep += m.rwd.rep;
+
+    // 5. Narrative & UI Update
+    notify(`✓ Mission Complete: +${stonesReward} Stones and +${expGain} Guild Exp!`);
+    addCL(`📜 Guild Mission [${m.nm}] finished. Rank progress increased.`, 'cl-r');
+    
+    // 6. Check for Promotion and Reset Mission Slot
+    checkGuildPromotion(); 
+    m.status = 'idle'; 
+    m.end = 0;
+    
+    renderGuildMissions();
+    updateUI();
+}
+
+function checkGuildPromotion() {
+    if (!G.guild) return;
+    
+    // Ensure numbers exist
+    if (typeof G.guildExp !== 'number' || isNaN(G.guildExp)) G.guildExp = 0;
+    if (typeof G.guildRankIdx !== 'number' || isNaN(G.guildRankIdx)) G.guildRankIdx = 0;
+
+    let nextRank = GUILD_RANKS[G.guildRankIdx + 1];
+    
+    // Check if player qualifies for promotion
+    if (nextRank && G.guildExp >= nextRank.reqExp) {
+        G.guildRankIdx++;
+        notify(`🎊 PROMOTED: You are now a ${nextRank.title}!`);
+        addUL(`📜 Guild Rank Up: Promoted to ${nextRank.title}. Rewards increased!`);
+        
+        // Check again in case they have enough for multiple ranks
+        checkGuildPromotion(); 
+    }
+}
+
     // ══════════════════════════════════════════════════════════════
     //                    GREAT EXPANSION: MERCHANT GUILD SHOP SYSTEM
     // ══════════════════════════════════════════════════════════════
@@ -6224,53 +6801,43 @@ function getStg(id) {
       if (shop.rotating && G.tick % 36000 === 0) { items.push(...shop.baseItems.slice(0, 2)); }
       return items;
     }
-    function getHaggleMult() { const bg = G.background; const dest = G.destiny; let mult = 1; if (bg?.id === 'merchant') mult *= 0.90; if (dest?.nm === 'Frugal') mult *= 0.90; return mult * (G.shopBon?.shopDisc || 1); }
-    function renderShop() {
-      const sg = $('shop-grid'); if (!sg) return;
-      const tabsCon = $('bazaar-tabs');
-      const shopId = G.currentShop || 'wandering';
-      // Render sub-tabs
-      if (tabsCon) {
-        tabsCon.innerHTML = Object.values(MERCHANT_SHOPS).map(s => {
-          const canAccess = !s.reqSect || G.sect?.founded;
-          return `<div class="bazaar-tab${shopId === s.id ? ' act' : ''}${canAccess ? '' : '" style="opacity:.4;cursor:default'}" onclick="${canAccess ? `switchMerchant('${s.id}')` : ''}">${s.ico} ${s.nm}</div>`;
-        }).join('');
-      }
-      // Update currency display
-      const bzS = $('bz-stones'); if (bzS) bzS.textContent = fmN(G.st);
-      const bzG = $('bz-gold'); if (bzG) bzG.textContent = fmN(G.gold);
-      const bzC = $('bz-cores'); if (bzC) bzC.textContent = fmN(Object.values(G.beasts || {}).reduce((a, b) => a + b, 0));
-      // Merchant timer
-      const timer = $('merchant-timer');
-      if (timer) {
-        const shop = MERCHANT_SHOPS[shopId];
-        if (shop?.rotating) {
-          const nextRefresh = G.merchantRefreshAt || 0;
-          const remaining = Math.max(0, nextRefresh - G.tick);
-          const secs = Math.ceil(remaining / 10);
-          timer.innerHTML = remaining > 0 ? `🔄 Stock refreshes in ${secs}s · <span style="cursor:pointer;text-decoration:underline;" onclick="refreshMerchantStock()">Refresh now (50 Stones)</span>` : `<span style="cursor:pointer;text-decoration:underline;" onclick="refreshMerchantStock()">🔄 Refresh stock (50 Stones)</span>`;
-        } else {
-          timer.textContent = '';
-        }
-      }
-      // Render items
-      const shop = MERCHANT_SHOPS[shopId];
-      if (!shop) return;
-      const items = getShopItems(shopId);
-      const haggle = getHaggleMult();
-      sg.innerHTML = items.map(itemId => {
-        const item = SHOP_ITEMS_DB[itemId]; if (!item) return '';
-        const cost = item.cost;
-        const costStr = Object.entries(cost).map(([k, v]) => {
-          const finalCost = Math.ceil(v * haggle);
-          if (k === 'stones') return `${fmN(finalCost)} Stones`;
-          if (k === 'gold') return `${finalCost} Gold`;
-          if (k === 'beastCores') return `${finalCost} Cores`;
-          return `${finalCost} ${k}`;
+function getHaggleMult() {
+  const bg = G.background;
+  const dest = G.destiny;
+  // Ensure we have a default multiplier
+  let mult = (G.shopBon && G.shopBon.shopDisc) ? G.shopBon.shopDisc : 1;
+  if (bg && bg.id === 'merchant') mult *= 0.90;
+  if (dest && dest.nm === 'Frugal') mult *= 0.90;
+  return mult;
+}
+function renderShop() {
+    const sg = $('shop-grid'); 
+    if (!sg) return;
+    const shopId = G.currentShop || 'wandering';
+    const items = getShopItems(shopId); // This checks relationship requirements
+    const haggle = getHaggleMult();
+
+    sg.innerHTML = items.map(itemId => {
+        const item = SHOP_ITEMS_DB[itemId];
+        if (!item) return '';
+        const costStr = Object.entries(item.cost).map(([k, v]) => {
+            const price = Math.ceil(v * haggle);
+            return `${fmN(price)} ${k === 'beastCores' ? 'Cores' : k.charAt(0).toUpperCase() + k.slice(1)}`;
         }).join(' + ');
-        return `<div class="shop-card"><div class="sh-ico">${item.ico}</div><div class="sh-nm">${item.nm}</div><div class="sh-desc">${item.desc}</div><div class="sh-cost">${costStr}${haggle < 1 ? ` <span style="color:var(--jade2);font-size:.6rem;">(${((1 - haggle) * 100).toFixed(0)}% off)</span>` : ''}</div><button class="btn" onclick="${item.fn}">Buy</button></div>`;
-      }).join('') || '<div class="ps">No items available from this merchant.</div>';
-    }
+
+        return `<div class="shop-card">
+            <div class="sh-ico">${item.ico}</div>
+            <div class="sh-nm">${item.nm}</div>
+            <div class="sh-desc">${item.desc}</div>
+            <div class="sh-cost">${costStr}</div>
+            <button class="btn" onclick="shopBuy('${itemId}')">Acquire</button>
+        </div>`;
+    }).join('');
+    
+    // Update currency counters in Bazaar
+    if($('bz-stones')) $('bz-stones').textContent = fmN(G.st);
+    if($('bz-gold')) $('bz-gold').textContent = fmN(G.gold);
+}
     function switchMerchant(shopId) {
       G.currentShop = shopId;
       renderShop();
@@ -6282,84 +6849,87 @@ function getStg(id) {
       notify('🔄 Merchant stock refreshed!');
       renderShop(); updateUI();
     }
-    function shopBuy(id) {
-      const item = SHOP_ITEMS_DB[id]; if (!item) return;
-      const haggle = getHaggleMult();
-      const cost = item.cost;
-      let canBuy = true;
-      Object.entries(cost).forEach(([k, v]) => {
-        const finalCost = Math.ceil(v * haggle);
-        if (k === 'stones' && G.st < finalCost) { notify(`Need ${finalCost} Stones!`); canBuy = false; }
-        if (k === 'gold' && G.gold < finalCost) { notify(`Need ${finalCost} Gold!`); canBuy = false; }
-        if (k === 'beastCores') {
-          const tot = Object.values(G.beasts || {}).reduce((a, b) => a + b, 0);
-          if (tot < finalCost) { notify(`Need ${finalCost} Beast Cores!`); canBuy = false; }
-        }
-      });
-      if (!canBuy) return;
-      Object.entries(cost).forEach(([k, v]) => {
-        const finalCost = Math.ceil(v * haggle);
-        if (k === 'stones') G.st -= finalCost;
-        if (k === 'gold') G.gold -= finalCost;
-        if (k === 'beastCores') {
-          let rem = finalCost;
-          for (const key of Object.keys(G.beasts)) { const t = Math.min(G.beasts[key], rem); G.beasts[key] -= t; rem -= t; if (!rem) break; }
-        }
-      });
-      switch (id) {
-        case 'qiPill_s': G.qi = Math.min(G.qi + 200, G.mqi); notify('+200 Qi'); break;
-        case 'brkPill_s': if (G.st < 80) { notify('Need 80 Stones!'); return; } G.st -= 80; G.brkBonus += .1; notify('+10% Breakthrough'); break;
-        case 'hpPill_s': if (G.st < 60) { notify('Need 60 Stones!'); return; } G.st -= 60; G.php = Math.min(G.php + Math.floor(G.mhp * .5), G.mhp); notify('HP +50%'); break;
-        case 'expPill_s': if (G.st < 120) { notify('Need 120 Stones!'); return; } G.st -= 120; G.daos[G.focusDao].s += 50; notify(`+50 ${G.focusDao} Sharpness`); break;
-        case 'stonePill_s': if (G.gold < 5) { notify('Need 5 Gold!'); return; } G.gold -= 5; G.st += 100; notify('+100 Stones'); break;
-        case 'allDao_s': if (G.gold < 25) { notify('Need 25 Gold!'); return; } G.gold -= 25; for (const id of G.unlDaos) G.daos[id].s += 30; notify('+30 Sharpness All Daos'); break;
-        case 'spiDef_s': if (G.st < 200) { notify('Need 200 Stones!'); return; } G.st -= 200; ARRAYS.find(a => a.id === 'd').costs = ARRAYS.find(a => a.id === 'd').costs.map(c => Math.floor(c * .9)); notify('Array cost −10%'); break;
-        case 'spiAtk_s': if (G.st < 250) { notify('Need 250 Stones!'); return; } G.st -= 250; G.shopBon.cdmg = (G.shopBon.cdmg || 1) + .1; notify('Combat dmg +10%'); break;
-        case 'rootSeed_s': if (G.st < 500) { notify('Need 500 Stones!'); return; } G.st -= 500; G.shopBon.stMult = (G.shopBon.stMult || 1) + .05; notify('Qi root mult +5%'); break;
-        case 'corePot_s': { const tot = Object.values(G.beasts).reduce((a, b) => a + b, 0); if (tot < 80) { notify('Need 80 Beast Cores!'); return; } let rem = 80; for (const k of Object.keys(G.beasts)) { const t = Math.min(G.beasts[k], rem); G.beasts[k] -= t; rem -= t; if (!rem) break; } G.shopBon.coreBonus = (G.shopBon.coreBonus || 0) + .2; notify('Core drop +20%'); break; }
-        case 'tribTali_s': { const tot = Object.values(G.beasts).reduce((a, b) => a + b, 0); if (tot < 150) { notify('Need 150 Beast Cores!'); return; } let rem = 150; for (const k of Object.keys(G.beasts)) { const t = Math.min(G.beasts[k], rem); G.beasts[k] -= t; rem -= t; if (!rem) break; } G.tribShield = .3; notify('Next trib: −30% bolt dmg'); break; }
+function shopBuy(id) {
+  const item = SHOP_ITEMS_DB[id];
+  if (!item) return;
+
+  const haggle = getHaggleMult();
+  const cost = item.cost;
+
+  // 1. Calculate total number of all beast cores combined
+  let totalCores = 0;
+  for (let key in G.beasts) {
+    totalCores += (G.beasts[key] || 0);
+  }
+
+  // 2. Affordability Check
+  for (const [k, v] of Object.entries(cost)) {
+    const finalCost = Math.ceil(v * haggle);
+    if (k === 'stones' && G.st < finalCost) { notify("Need more Spirit Stones!"); return; }
+    if (k === 'gold' && G.gold < finalCost) { notify("Need more Gold!"); return; }
+    if (k === 'beastCores' && totalCores < finalCost) { notify("Need more Beast Cores!"); return; }
+  }
+
+  // 3. Deduction Logic
+  for (const [k, v] of Object.entries(cost)) {
+    const finalCost = Math.ceil(v * haggle);
+    if (k === 'stones') G.st -= finalCost;
+    if (k === 'gold') G.gold -= finalCost;
+    if (k === 'beastCores') {
+      let remainingToPay = finalCost;
+      // Subtract cores starting from the first type available
+      for (let type in G.beasts) {
+        let take = Math.min(G.beasts[type], remainingToPay);
+        G.beasts[type] -= take;
+        remainingToPay -= take;
+        if (remainingToPay <= 0) break;
       }
-      updateUI();
     }
-    function realmShopBuy(id) {
-      const item = REALM_UNLOCK_ITEMS.find(i => i.id === id); if (!item) return;
-      if (G.rIdx < item.realmReq) { notify(`Requires Realm ${item.realmReq}!`); return; }
-      const haggle = getHaggleMult();
-      const cost = item.cost;
-      let canBuy = true;
-      Object.entries(cost).forEach(([k, v]) => {
-        const finalCost = Math.ceil(v * haggle);
-        if (k === 'stones' && G.st < finalCost) { notify(`Need ${finalCost} Stones!`); canBuy = false; }
-        if (k === 'gold' && G.gold < finalCost) { notify(`Need ${finalCost} Gold!`); canBuy = false; }
-      });
-      if (!canBuy) return;
-      Object.entries(cost).forEach(([k, v]) => {
-        const finalCost = Math.ceil(v * haggle);
-        if (k === 'stones') G.st -= finalCost;
-        if (k === 'gold') G.gold -= finalCost;
-      });
-      switch (id) {
-        case 'mortal_stone_pouch': G.st += 100; notify('+100 Stones'); break;
-        case 'mortal_qi_pill': G.qi = Math.min(G.qi + 150, G.mqi); notify('+150 Qi'); break;
-        case 'qi_sea_compress': G.shopBon.nextRealmCost = (G.shopBon.nextRealmCost || 1) * 0.8; notify('Next breakthrough 20% cheaper'); break;
-        case 'foundation_scroll': G.brkBonus += 0.20; notify('+20% breakthrough chance'); break;
-        case 'golden_core_manual': G.shopBon.coreSpeed = (G.shopBon.coreSpeed || 1) + 0.30; notify('Golden Core 30% faster'); break;
-        case 'immortal_ascension_kit': G.brkBonus += 0.50; notify('+50% immortal breakthrough chance'); break;
-        case 'tribulation_preparation': G.tribShield = 0.30; notify('Next tribulation −30% damage'); break;
-        case 'immortal_body_pill': G.shopBon.immortalSpeed = (G.shopBon.immortalSpeed || 1) + 0.40; notify('Immortal formation 40% faster'); break;
-        case 'celestial_stone_cache': G.st += 1000; notify('+1000 Stones'); break;
-        case 'saint_condensation': G.shopBon.saintSpeed = (G.shopBon.saintSpeed || 1) + 0.40; notify('Saint realm 40% faster'); break;
-        case 'saint_enlightenment': G.shopBon.saintComprehension = (G.shopBon.saintComprehension || 1) + 0.50; notify('Saint technique comprehension +50%'); break;
-        case 'god_ascension_manual': G.brkBonus += 0.60; notify('+60% divine breakthrough chance'); break;
-        case 'divine_authority_token': G.shopBon.godSpeed = (G.shopBon.godSpeed || 1) + 0.30; notify('God abilities unlock 30% faster'); break;
-        case 'cosmic_consciousness_pill': G.shopBon.divineRange = (G.shopBon.divineRange || 1) * 1.5; notify('Divine sense +50%'); break;
-        case 'chaos_stone_array': G.shopBon.chaosComp = (G.shopBon.chaosComp || 1) * 2; notify('Chaos comprehension doubled 1 hour'); break;
-        case 'primordial_essence_flask': G.qi = G.mqi; G.php = G.mhp; notify('HP & Qi fully restored'); break;
-        case 'dao_insight_gem': Object.keys(G.daos).forEach(k => { G.daos[k].s += G.daos[k].s * 0.40; }); notify('All Dao +40%'); break;
-        case 'dao_legacy_codex': G.st -= Math.ceil(100000 * haggle); Object.keys(G.daos).forEach(k => { G.daos[k].s += 500; }); notify('+500 all Dao sharpness'); break;
-      }
-      updateUI();
-    }
+  }
+
+  // 4. Add to Inventory
+  addInv({
+    id: id,
+    nm: item.nm,
+    ico: item.ico,
+    type: id.includes('Pill') ? 'PILL' : 'TALISMAN',
+    desc: item.desc,
+    qty: 1
+  });
+
+  notify(`✦ Acquired: ${item.nm}`);
+  updateUI();
+  renderShop(); // Refresh the currency numbers shown in the Bazaar
+}
+function realmShopBuy(id) {
+  const item = REALM_UNLOCK_ITEMS.find(i => i.id === id); 
+  if (!item || G.rIdx < item.realmReq) return;
+
+  const haggle = getHaggleMult();
+  for (const [k, v] of Object.entries(item.cost)) {
+    const finalCost = Math.ceil(v * haggle);
+    if (k === 'stones' && G.st < finalCost) { notify("Not enough Stones"); return; }
+    if (k === 'gold' && G.gold < finalCost) { notify("Not enough Gold"); return; }
+  }
+
+  for (const [k, v] of Object.entries(item.cost)) {
+    const finalCost = Math.ceil(v * haggle);
+    if (k === 'stones') G.st -= finalCost;
+    if (k === 'gold') G.gold -= finalCost;
+  }
+
+  // Store in inventory
+  addInv({
+    id: item.id,
+    nm: item.nm,
+    ico: item.ico,
+    qty: 1,
+    desc: item.desc
+  });
+
+  notify(`Purchased ${item.nm}`);
+  updateUI();
+}
     function renderRealmShop() {
       const sg = $('realm-shop-grid'); if (!sg) return;
       const currentRealm = G.rIdx || 0;
@@ -6405,8 +6975,17 @@ function getStg(id) {
     };
     function getInvCapacity() { return 48 + (G.rIdx || 0) * 8 + (G.sect?.level || 0) * 4; }
     function getInvWeight() { return (G.inv || []).reduce((sum, it) => { const db = ITEM_DATABASE[it.id]; return sum + ((db?.weight || 1) * (it.qty || 1)); }, 0); }
-    function addInv(item) { if (!G.inv) G.inv = []; const ex = G.inv.find(i => i.id === item.id); if (ex) ex.qty = (ex.qty || 1) + (item.qty || 1); else G.inv.push({ ...item, qty: item.qty || 1 }); }
-    function removeInv(itemId, qty = 1) { if (!G.inv) return false; const it = G.inv.find(i => i.id === itemId); if (!it) return false; it.qty = (it.qty || 1) - qty; if (it.qty <= 0) G.inv = G.inv.filter(i => i.id !== itemId); return true; }
+function addInv(item) {
+  if (!G.inv) G.inv = [];
+  const ex = G.inv.find(i => i.id === item.id);
+  if (ex) {
+    // Force numbers to ensure math doesn't result in "11" instead of 2
+    ex.qty = (parseInt(ex.qty) || 1) + (parseInt(item.qty) || 1);
+  } else {
+    G.inv.push({ ...item });
+  }
+  renderInv(); // This forces the Inventory tab to redraw
+}    function removeInv(itemId, qty = 1) { if (!G.inv) return false; const it = G.inv.find(i => i.id === itemId); if (!it) return false; it.qty = (it.qty || 1) - qty; if (it.qty <= 0) G.inv = G.inv.filter(i => i.id !== itemId); return true; }
     function getItemDef(itemId) { return ITEM_DATABASE[itemId] || null; }
 
     // ══════════════════════════════════════════════════════════════
@@ -6414,22 +6993,44 @@ function getStg(id) {
     // ══════════════════════════════════════════════════════════════
     function gameTick() {
       G.tick++; const dt = 0.1;
-      // Passive Qi (if not auto-meditating, we still get passive; auto-med is handled in processAutos)
-      if (!G.auto.med) G.qi = Math.min(G.qi + passQiPS() * dt, G.mqi);
-      else G.qi = Math.min(G.qi + passQiPS() * dt, G.mqi);
+      // Passive Qi generation every tick; auto-meditation gives 3× burst bonus
+      const passGain = passQiPS() * dt;
+      if (G.auto.med) {
+        G.qi = Math.min(G.qi + passGain * 3, G.mqi);
+      } else {
+        G.qi = Math.min(G.qi + passGain, G.mqi);
+      }
       // Show/hide breakthrough button
-      const bk = $('bkbtn'); if (bk) bk.style.display = (G.qi >= G.mqi && G.rIdx < REALMS.length - 1 && !G.combat.active) ? 'inline-block' : 'none';
+      const bk = $('bkbtn'); if (bk) bk.style.display = (G.qi >= G.mqi && G.rIdx < FULL_REALM_INDEX.length - 1 && !G.combat.active) ? 'inline-block' : 'none';
+      
       // Gather task
-      if (G.gTask) {
-        G.gTask.el += 100; sw('gbar', (G.gTask.el / G.gTask.dur) * 100);
+ if (G.gTask) {
+        G.gTask.el += 100; 
+        const progress = (G.gTask.el / G.gTask.dur) * 100;
+        sw('gbar', progress); // This moves the bar
         if (G.gTask.el >= G.gTask.dur) {
           const hd = HERBS.find(h => h.k === G.gTask.herb);
-          const q = hd.yld[0] + Math.floor(Math.random() * (hd.yld[1] - hd.yld[0] + 1)) + (G.root?.af.herb || 0);
-          G.herbs[G.gTask.herb] += q;
+          const q = hd.yld[0] + Math.floor(Math.random() * (hd.yld[1] - hd.yld[0] + 1)) + (G.root?.af?.herb || 0);
+          G.herbs[G.gTask.herb] = (G.herbs[G.gTask.herb] || 0) + q;
           if (!G.auto.gath) notify(`+${q}× ${hd.nm}`);
-          G.gTask = null; $('gpw').style.display = 'none'; sw('gbar', 0);
+          G.gTask = null; 
+          const gpw = $('gpw'); if (gpw) gpw.style.display = 'none';
+              if (G.tick % 10 === 0 && G.guild) renderGuildMissions(); 
+
         }
       }
+          if (G.tick % 10 === 0 && G.guild && G.guildMissions) {
+        const now = Date.now();
+        G.guildMissions.forEach(m => {
+            if (m.status === 'running' && now >= m.end) {
+                m.status = 'ready';
+                // If we are currently looking at the guild tab, refresh it
+                if (document.getElementById('guild').classList.contains('act')) {
+                    renderGuildMissions();
+                }
+            }
+        });
+    }
       // Refine task
       if (G.rTask) {
         G.rTask.el += 100; sw('rbar', (G.rTask.el / G.rTask.dur) * 100);
@@ -6490,41 +7091,54 @@ function getStg(id) {
     //                    UI RENDERING
     // ══════════════════════════════════════════════════════════════
     function set$(id, val) { const el = $(id); if (el) el.textContent = val; }
-    function updateUI() {
+   function updateUI() {
       if (!G.charDone) return;
-      // Header
-       const btn = $('music-toggle');
-      if (btn) {
-        btn.textContent = G.musicMuted ? "🔈 Music: OFF" : "🔊 Music: ON";
-        btn.classList.toggle('btn-jade', !G.musicMuted);
+      
+      // Header Music Button — sync MusicManager state from G, then let it own the UI
+      if (typeof MusicManager !== 'undefined' && MusicManager.isMuted !== G.musicMuted) {
+        MusicManager.isMuted = G.musicMuted;
       }
+      if (typeof MusicManager !== 'undefined') {
+        MusicManager.updateButtonUI();
+      } else {
+        // Fallback before MusicManager is defined
+        const mBtn = $('music-toggle');
+        if (mBtn) {
+          mBtn.textContent = G.musicMuted ? "🔈 MUSIC: OFF" : "🔊 MUSIC: ON";
+          mBtn.className = G.musicMuted ? "btn music-btn-off" : "btn music-btn-on";
+        }
+      }
+
+      // Header Resource Display
       set$('qd', fmN(Math.floor(G.qi)));
       set$('stoned', fmN(G.st));
       set$('goldd', fmN(G.gold));
       set$('repd', fmN(G.rep));
       set$('tribd', G.tribs);
+      
       const rm = REALMS[Math.min(G.rIdx || 0, REALMS.length - 1)] || REALMS[0];
-      set$('rdsp', `${rm.nm} · ${rm.sb}`);
-      set$('rmbadge', `${rm.sb} · ${rm.nm}`);
-      // Cult tab
-      sw('qbar', (G.qi / G.mqi) * 100); set$('qbl', `${fmN(Math.floor(G.qi))} / ${fmN(G.mqi)} Qi`);
+      const fri = FULL_REALM_INDEX[G.rIdx || 0];
+      const displayNm = fri?.nm || rm.nm;
+      const displaySb = rm.sb || fri?.group || '';
+      set$('rdsp', `${displayNm} · ${displaySb}`);
+      set$('rmbadge', `${displaySb ? displaySb + ' · ' : ''}${displayNm}`);
+      
+      // Cult tab — ensure G.mqi is always a finite number (guard against old saves with Infinity)
+      if (!G.mqi || !isFinite(G.mqi)) G.mqi = getRealmMaxQi(G.rIdx || 0);
+      sw('qbar', (G.qi / G.mqi) * 100); 
+      set$('qbl', `${fmN(Math.floor(G.qi))} / ${fmN(G.mqi)} Qi`);
       set$('pqps', passQiPS().toFixed(3));
-      set$('mnbhdr', `×${G.manBon.qi.toFixed(2)}`);
-      set$('tmbhdr', `×${timeM().toFixed(2)}`);
-      set$('destqmhdr', `×${getDestinyQiMult().toFixed(2)}`);
-      set$('srbhdr', `×${soulRes().toFixed(2)}`);
-      set$('focushdr', G.focusDao);
-      // Render realm progressions with seals
-      // Body realms
-      const physIdx = G.physique?.realm || 0;
-      const physRealmName = PHYSIQUE_REALMS[physIdx] || PHYSIQUE_REALMS[0];
-      // body badge removed (redundant)
-      const pgrid = $('physique-grid'); if (pgrid) {
-        pgrid.innerHTML = PHYSIQUE_REALMS.map((r, i) => {
-          const isCurrent = i === physIdx;
-          return `<div style="padding:6px 7px;border:1.5px solid ${isCurrent ? 'rgba(138,100,0,0.6)' : i < physIdx ? 'rgba(45,122,82,0.4)' : 'rgba(0,0,0,0.15)'};background:${isCurrent ? 'rgba(138,100,0,0.12)' : i < physIdx ? 'rgba(45,122,82,0.06)' : 'rgba(0,0,0,0.04)'};font-family:'ZCOOL XiaoWei',serif;font-size:.6rem;letter-spacing:.3px;color:${isCurrent ? 'var(--gold)' : i < physIdx ? 'var(--jade2)' : 'var(--ink3)'};text-align:center;border-radius:3px;word-break:break-word;line-height:1.3;\"><div>${r.nm}</div></div>`;
-        }).join('');
-      }
+      
+      // Refresh Sub-tabs
+      renderThreefold();
+      renderDaos();
+      renderCharSheet();
+      
+      // Automation toggles sync
+      ['med', 'brk', 'gath', 'ref', 'dao', 'bat', 'mis', 'physique', 'mind'].forEach(k => { 
+        const el = $('at-' + k); 
+        if (el) el.classList.toggle('on', G.auto[k] ?? false); 
+      });
       // Mind realms
       const mindIdx = G.mind?.realm || 0;
       const mindRealmName = MIND_REALMS[mindIdx] || MIND_REALMS[0];
@@ -6566,8 +7180,8 @@ function getStg(id) {
       }
       // Alchemy
       const alklk = $('alch-locked'), alkct = $('alch-ct');
-      if (alklk && alkct) { alklk.style.display = G.rIdx >= 1 ? 'none' : 'block'; alkct.style.display = G.rIdx >= 1 ? 'block' : 'none'; }
-      if (G.rIdx >= 1) { updHerbs(); updPills(); }
+      if (alklk && alkct) { alklk.style.display = G.rIdx >= 2 ? 'none' : 'block'; alkct.style.display = G.rIdx >= 2 ? 'block' : 'none'; }
+      if (G.rIdx >= 2) { updHerbs(); updPills(); }
       // Daos
       renderDaos();
       // Manuals
@@ -6594,7 +7208,8 @@ function getStg(id) {
       renderNPCs();
       // Automation toggles sync
       ['med', 'brk', 'gath', 'ref', 'dao', 'bat', 'mis', 'physique', 'mind'].forEach(k => { const el = $('at-' + k); if (el) el.classList.toggle('on', G.auto[k] ?? false); });
-    }
+    } // end updateUI
+
     function updHerbs() {
       const hg = $('hgrid'); const hb = $('hbtns'); if (!hg || !hb) return;
       hg.innerHTML = HERBS.map(h => `<div class="herb-box" style="opacity:${G.rIdx >= h.rR ? 1 : .3}"><div class="hico">${h.ico}</div><div class="hn">${h.nm}</div><div class="hq">${G.herbs[h.k] || 0}</div></div>`).join('');
@@ -6801,11 +7416,27 @@ function getStg(id) {
   const pi = $('physique-info'); if (pi) pi.innerHTML = `Current: <b class="tg">${phys.nm}</b> · Stage: <b class="tg">${(G.physique?.substage || 0) + 1}/9</b>`;
 
   const mb = $('mind-bar'); if (mb) mb.style.width = Math.min(100, (mindExp / mindMexp) * 100) + '%';
-  // FIX: Added fmN here
   const me = $('mind-exp'); if (me) me.textContent = `${fmN(mindExp)} / ${fmN(mindMexp)} Exp`;
   const mbon = $('mind-bonus'); if (mbon) mbon.innerHTML = `Bonuses: Qi +${((mindBonus.mana - 1) * 100).toFixed(0)}% · Mental Def +${((mindBonus.mentalDef - 1) * 100).toFixed(0)}% · Comprehension +${((mindBonus.comprehension - 1) * 100).toFixed(0)}%`;
   const mi = $('mind-info'); if (mi) mi.innerHTML = `Current: <b class="tg">${mind.nm}</b> · Stage: <b class="tg">${(G.mind?.substage || 0) + 1}/9</b>`;
-  const si = $('soul-info'); if (si) si.innerHTML = `Current: <b class="tg">${(REALMS[G.rIdx] || REALMS[0]).nm}</b> · Realm Index: <b class="tg">${G.rIdx}</b>`;
+
+  // Soul info: use FULL_REALM_INDEX for names across all 65 realms
+const soulRealmNm = FULL_REALM_INDEX[G.rIdx]?.nm || REALMS[G.rIdx]?.nm || `Realm ${G.rIdx}`;
+const si = $('soul-info'); 
+if (si) {
+    const displayStage = (G.realmSubstage || 0) + 1;
+    si.innerHTML = `Current: <b class="tg">${soulRealmNm}</b> · Stage: <b class="tg">${displayStage}/10</b> · Realm Index: <b class="tg">${G.rIdx}</b>`;
+}
+
+  // Physique grid — render realm badges (was never implemented)
+  const physIdx = G.physique?.realm || 0;
+  const pgrid = $('physique-grid');
+  if (pgrid) {
+    pgrid.innerHTML = PHYSIQUE_REALMS.map((r, i) => {
+      const isCurrent = i === physIdx;
+      return `<div style="padding:6px 7px;border:1.5px solid ${isCurrent ? 'rgba(138,100,0,0.6)' : i < physIdx ? 'rgba(45,122,82,0.4)' : 'rgba(0,0,0,0.15)'};background:${isCurrent ? 'rgba(138,100,0,0.12)' : i < physIdx ? 'rgba(45,122,82,0.06)' : 'rgba(0,0,0,0.04)'};font-family:'ZCOOL XiaoWei',serif;font-size:.6rem;letter-spacing:.3px;color:${isCurrent ? 'var(--gold)' : i < physIdx ? 'var(--jade2)' : 'var(--ink3)'};text-align:center;border-radius:3px;word-break:break-word;line-height:1.3;"><div>${r.nm}</div></div>`;
+    }).join('');
+  }
 }
     function renderInv() {
       const g = $('invgrid'); if (!g) return;
@@ -6933,23 +7564,25 @@ function getStg(id) {
       if (db.stats.pillEfficacy) G.shopBon.pq = Math.max(0, (G.shopBon.pq || 0) - db.stats.pillEfficacy);
       if (db.stats.forging) G.shopBon.pq = Math.max(0, (G.shopBon.pq || 0) - db.stats.forging * 0.5);
     }
-    function useItem(itemId) {
-      const invItem = (G.inv || []).find(i => i.id === itemId);
-      if (!invItem) return;
-      const db = getItemDef(itemId);
-      // Apply basic effects based on stats
-      if (db?.stats) {
-        if (db.stats.meditation) { G.qi = Math.min(G.qi + Math.floor(G.mqi * 0.2), G.mqi); notify(`Used ${db.nm}: +20% Qi`); }
-        else if (db.stats.pillEfficacy) { G.shopBon.pq = (G.shopBon.pq || 0) + 0.05; notify(`Used ${db.nm}: +5% pill quality`); }
-        else if (db.stats.comprehension) { for (const id of G.unlDaos) G.daos[id].s += 20; notify(`Used ${db.nm}: +20 all Dao sharpness`); }
-        else { G.qi = Math.min(G.qi + Math.floor(G.mqi * 0.1), G.mqi); notify(`Used ${db?.nm || invItem.nm}`); }
-      } else {
-        G.st += 10; notify(`Used ${invItem.nm}: +10 Stones`);
-      }
-      removeInv(itemId, 1);
-      closeItemModal();
-      renderInv(); updateUI();
-    }
+function useItem(itemId) {
+  const invItem = (G.inv || []).find(i => i.id === itemId);
+  if (!invItem) return;
+
+  switch (itemId) {
+    case 'mortal_stone_pouch': G.st += 100; break;
+    case 'celestial_stone_cache': G.st += 1000; break;
+    case 'mortal_qi_pill': G.qi = Math.min(G.qi + 150, G.mqi); break;
+    case 'qiPill_s': G.qi = Math.min(G.qi + 200, G.mqi); break;
+    case 'hpPill_s': G.php = Math.min(G.php + Math.floor(G.mhp * 0.5), G.mhp); break;
+    case 'foundation_scroll': G.brkBonus += 0.20; break;
+    case 'brkPill_s': G.brkBonus += 0.10; break;
+    // Add other cases as needed...
+  }
+
+  removeInv(itemId, 1);
+  closeItemModal();
+  updateUI();
+}
     function dropItem(itemId) {
       if (!confirm('Discard this item? This cannot be undone.')) return;
       // Unequip first if equipped
@@ -7164,7 +7797,7 @@ function getStg(id) {
     }
 
     // ── Node Exploration ──
-    function travelToNode(nodeId) {
+   function travelToNode(nodeId) {
       if (G.combat && G.combat.active && G.combat.phase !== 'idle') { notify('⚠️ Cannot travel during combat!'); return; }
       const node = NODE_MAP[nodeId]; if (!node) return;
       if (G.rIdx < node.unlockRealm) { notify(`🔒 Requires Realm ${node.unlockRealm} to enter.`); return; }
@@ -7173,9 +7806,32 @@ function getStg(id) {
       if (!G.exploredNodes) G.exploredNodes = [];
       if (!G.exploredNodes.includes(nodeId)) G.exploredNodes.push(nodeId);
       addCLog(`<span class="cl-s">▷ Arrived at ${node.nm}...</span>`);
-      renderWorldMap(); renderNodeDetail(nodeId);
+      renderWorldMap(); 
+      renderNodeDetail(nodeId);
+      
+      // Auto-scroll map to the new location
+      scrollToNode(nodeId);
     }
 
+    // NEW FUNCTION: Smoothly scrolls the map to center on the active node
+    function scrollToNode(nodeId) {
+      const container = document.getElementById('world-node-map');
+      if (!container) return;
+      const node = NODE_MAP[nodeId];
+      if (!node) return;
+      
+      const W = 1200; // Total SVG Width
+      const nodeX = (node.x / 200) * W; // Calculate absolute X position
+      
+      // Center the view on the node
+      const containerWidth = container.clientWidth;
+      const scrollTarget = Math.max(0, nodeX - (containerWidth / 2));
+      
+      container.scrollTo({
+        left: scrollTarget,
+        behavior: 'smooth'
+      });
+    }
     function triggerNodeEncounter(nodeId) {
       const now = Date.now();
       const cdRemain = (G.nodeEncounterCooldown || 0) - now;
@@ -7187,11 +7843,12 @@ function getStg(id) {
       G.nodeEncounterCooldown = now + 8000;
       if (chosen.type === 'combat' || chosen.type === 'boss') {
         startNodeCombat(chosen.enemy);
-      } else if (chosen.type === 'herb') {
+} else if (chosen.type === 'herb') {
         const count = chosen.rwd.min + Math.floor(Math.random() * (chosen.rwd.max - chosen.rwd.min + 1));
         G.herbs[chosen.rwd.herb] = (G.herbs[chosen.rwd.herb] || 0) + count;
         addCLog(`<span class="cl-r">✦ Gathered ${count}× ${chosen.rwd.herb}!</span>`);
-        notify(`🌿 Gathered ${count} herbs.`);
+        notify(`🌿 Found ${count} herbs.`);
+        updHerbs(); // Refresh the Alchemy tab display
       } else if (chosen.type === 'treasure') {
         const r = chosen.rwd;
         if (r.stones) G.st += r.stones; if (r.gold) G.gold += r.gold;
@@ -7389,41 +8046,76 @@ function getStg(id) {
     </div>`;
     }
 
+    // ── World Tier Row Rendering ──
+    function renderWorldTierRow() {
+      const row = $('world-tier-row');
+      if (!row) return;
+      const currentTier = G.worldTier || 0;
+      row.innerHTML = WORLD_TIERS.map((tier, i) => {
+        const isAccessible = i <= currentTier;
+        const isCurrent = i === currentTier;
+        const qiStr = tier.qiDensity >= 1000 ? `×${(tier.qiDensity).toLocaleString()}` : `×${tier.qiDensity}`;
+        const accessStr = isAccessible
+          ? `<span style="color:var(--jade2);font-size:0.7rem;">✓ Accessible</span>`
+          : `<span style="color:var(--ink3);font-size:0.7rem;">🔒 Realm ${tier.unlockRealm} needed</span>`;
+        const [cnNm, ...enParts] = tier.nm.split(' ');
+        const enNm = enParts.join(' ');
+        return `<div class="tier-banner tier-${i}" style="
+          flex:1;min-width:120px;border-radius:6px;padding:10px 8px;cursor:default;
+          ${isCurrent ? 'box-shadow:0 0 0 2px var(--gold2),0 2px 10px rgba(180,130,0,0.2);' : 'opacity:' + (isAccessible ? '1' : '0.55') + ';'}
+        ">
+          <div class="tier-nm">${cnNm}</div>
+          <div style="font-family:'Noto Serif SC',serif;font-size:0.72rem;color:var(--ink3);letter-spacing:1px;margin-bottom:4px;">${enNm}</div>
+          <div style="font-size:0.7rem;color:var(--gold2);margin-bottom:3px;">Qi ${qiStr} · ${accessStr}</div>
+        </div>`;
+      }).join('');
+    }
+
     // ── World Map Rendering ──
     function renderWorldMap() {
+      renderWorldTierRow();
       const container = $('world-node-map'); if (!container) return;
-      const W = 600, H = 320; // SVG canvas size
-      const explored = G.exploredNodes || []; const current = G.currentNode || 'spirit_forest';
+      
+      const W = 1200, H = 320; 
+      const current = G.currentNode || 'spirit_forest';
       let lines = '', dots = '';
       const drawnLinks = new Set();
 
-      // Draw connection lines first (behind nodes)
+      // 1. Generate Lines
       for (const [nid, node] of Object.entries(NODE_MAP)) {
         if (node.tier > (G.worldTier || 0)) continue;
         for (const link of (node.links || [])) {
           const key = [nid, link].sort().join('|'); if (drawnLinks.has(key)) continue; drawnLinks.add(key);
           const n2 = NODE_MAP[link]; if (!n2 || n2.tier > (G.worldTier || 0)) continue;
-          const x1 = (node.x / 100) * W, y1 = (node.y / 100) * H;
-          const x2 = (n2.x / 100) * W, y2 = (n2.y / 100) * H;
+          const x1 = (node.x / 200) * W, y1 = (node.y / 100) * H;
+          const x2 = (n2.x / 200) * W, y2 = (n2.y / 100) * H;
           lines += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="rgba(138,100,0,0.22)" stroke-width="1.5" stroke-dasharray="5,3"/>`;
         }
       }
 
-      // Draw tier background zones
+      // 2. Generate Background Tiers (With Fixed Colors)
       const tierZones = `
-    <rect x="0" y="0" width="${W * 0.62}" height="${H}" fill="rgba(200,185,145,0.10)" rx="2"/>
-    <rect x="${W * 0.62}" y="0" width="${W * 0.22}" height="${H}" fill="rgba(52,85,160,0.06)" rx="2"/>
-    <rect x="${W * 0.84}" y="0" width="${W * 0.16}" height="${H}" fill="rgba(200,80,0,0.06)" rx="2"/>
+    <rect x="0" y="0" width="${W * 0.31}" height="${H}" fill="rgba(200,185,145,0.10)" rx="2"/>
+    <rect x="${W * 0.31}" y="0" width="${W * 0.11}" height="${H}" fill="rgba(52,85,160,0.06)" rx="2"/>
+    <rect x="${W * 0.42}" y="0" width="${W * 0.08}" height="${H}" fill="rgba(200,80,0,0.06)" rx="2"/>
+    <rect x="${W * 0.50}" y="0" width="${W * 0.15}" height="${H}" fill="rgba(160,110,140,0.06)" rx="2"/>
+    <rect x="${W * 0.65}" y="0" width="${W * 0.15}" height="${H}" fill="rgba(80,140,160,0.06)" rx="2"/>
+    <rect x="${W * 0.80}" y="0" width="${W * 0.20}" height="${H}" fill="rgba(60,40,80,0.06)" rx="2"/>
+    
     <text x="6" y="14" font-size="10" fill="rgba(138,100,0,0.50)" font-family="ZCOOL XiaoWei,serif">凡界 Mortal</text>
-    <text x="${(W * 0.63).toFixed(0)}" y="14" font-size="10" fill="rgba(52,85,160,0.60)" font-family="ZCOOL XiaoWei,serif">中天 Middle</text>
-    <text x="${(W * 0.85).toFixed(0)}" y="14" font-size="10" fill="rgba(184,80,32,0.60)" font-family="ZCOOL XiaoWei,serif">神界</text>`;
+    <text x="${(W * 0.32).toFixed(0)}" y="14" font-size="10" fill="rgba(52,85,160,0.60)" font-family="ZCOOL XiaoWei,serif">中天 Middle</text>
+    <text x="${(W * 0.43).toFixed(0)}" y="14" font-size="10" fill="rgba(184,80,32,0.60)" font-family="ZCOOL XiaoWei,serif">神界 Divine</text>
+    <text x="${(W * 0.51).toFixed(0)}" y="14" font-size="10" fill="rgba(122,43,92,0.60)" font-family="ZCOOL XiaoWei,serif">圣界 Saint</text>
+    <text x="${(W * 0.66).toFixed(0)}" y="14" font-size="10" fill="rgba(43,107,122,0.60)" font-family="ZCOOL XiaoWei,serif">神域 God</text>
+    <text x="${(W * 0.81).toFixed(0)}" y="14" font-size="10" fill="rgba(61,38,77,0.60)" font-family="ZCOOL XiaoWei,serif">混沌 Chaos</text>`;
 
-      const tierColors = ['#8a6400', '#3455a0', '#b85020'];
+      // 3. Generate Nodes (With Fixed Colors)
+      const tierColors = ['#8a6400', '#3455a0', '#b85020', '#7a2b5c', '#0f5e63', '#4b2c5e'];
       for (const [nid, node] of Object.entries(NODE_MAP)) {
         const isLocked = node.tier > (G.worldTier || 0) || G.rIdx < node.unlockRealm;
         const isCurrent = nid === current;
         const col = tierColors[node.tier] || '#8a6400';
-        const cx = (node.x / 100) * W, cy = (node.y / 100) * H;
+        const cx = (node.x / 200) * W, cy = (node.y / 100) * H;
         const r = isCurrent ? 11 : 8;
         const glowR = r + 5;
         dots += `<g class="node-dot${isLocked ? ' locked' : ''}" style="cursor:${isLocked ? 'not-allowed' : 'pointer'}" onclick="${isLocked ? '' : ` travelToNode('${nid}')`}" title="${node.nm}">
@@ -7434,17 +8126,163 @@ function getStg(id) {
     </g>`;
       }
 
-      // Update tier row
-      const tr = $('world-tier-row');
-      if (tr) tr.innerHTML = WORLD_TIERS.map((t, i) => `<div class="tier-banner tier-${i}" style="flex:1;min-width:140px;"><div class="tier-nm">${t.nm}</div><div style="font-size:.6rem;color:var(--ink3);font-style:italic;">Qi ×${t.qiDensity} · ${i <= (G.worldTier || 0) ? '✓ Accessible' : '🔒 Realm ' + t.unlockRealm + ' needed'}</div></div>`).join('');
+      // 4. Render SVG structure with Group Wrapper and Controls
+      // Note: We use onmousedown/onwheel inline to attach events immediately
+      container.innerHTML = `
+        <svg id="map-svg" width="100%" height="100%" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" 
+             onmousedown="mapDragStart(event)" 
+             onmousemove="mapDragMove(event)" 
+             onmouseup="mapDragEnd()" 
+             onmouseleave="mapDragEnd()"
+             onwheel="mapZoom(event)">
+<g id="map-content" transform="translate(${G.mapView.x}, ${G.mapView.y}) scale(${G.mapView.scale})" style="shape-rendering: geometricPrecision;">
+            ${tierZones}
+            ${lines}
+            ${dots}
+          </g>
+        </svg>
+        <div class="map-controls">
+          <button class="map-btn" onclick="zoomBtn(0.2)">+</button>
+          <button class="map-btn" onclick="zoomBtn(-0.2)">−</button>
+          <button class="map-btn" onclick="resetMap()" style="font-size:0.7rem">↺</button>
+        </div>`;
+    }
+// ── Refined Map Interaction Logic (Strict Boundaries) ──
+    
+    function updateMapTransform() {
+      const g = document.getElementById('map-content');
+      const container = document.getElementById('world-node-map');
+      if (!g || !container) return;
 
-      container.innerHTML = `<svg width="100%" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="display:block;">
-    ${tierZones}
-    ${lines}
-    ${dots}
-  </svg>`;
+      const cW = container.clientWidth;
+      const cH = container.clientHeight;
+      const W = 1200; // Original Width
+      const H = 320;  // Original Height
+
+      // Ensure scale is never so small that it leaves a height gap
+      const minScale = Math.max(1.0, cH / H);
+      if (G.mapView.scale < minScale) G.mapView.scale = minScale;
+
+      const currentW = W * G.mapView.scale;
+      const currentH = H * G.mapView.scale;
+
+      // Bound Clamping
+      if (currentW > cW) {
+        if (G.mapView.x > 0) G.mapView.x = 0;
+        if (G.mapView.x < cW - currentW) G.mapView.x = cW - currentW;
+      } else {
+        G.mapView.x = (cW - currentW) / 2;
+      }
+
+      if (currentH > cH) {
+        if (G.mapView.y > 0) G.mapView.y = 0;
+        if (G.mapView.y < cH - currentH) G.mapView.y = cH - currentH;
+      } else {
+        G.mapView.y = (cH - currentH) / 2;
+      }
+
+      g.setAttribute('transform', `translate(${G.mapView.x}, ${G.mapView.y}) scale(${G.mapView.scale})`);
+    }
+    function mapDragStart(e) {
+      // Allow buttons and nodes to be clicked still
+      if (e.target.closest('.node-dot') || e.target.closest('.map-btn')) return;
+      
+      e.preventDefault();
+      G.mapView.isDragging = true;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      G.mapView.startX = clientX;
+      G.mapView.startY = clientY;
     }
 
+    function mapDragMove(e) {
+      if (!G.mapView.isDragging) return;
+      
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      
+      const dx = clientX - G.mapView.startX;
+      const dy = clientY - G.mapView.startY;
+      
+      G.mapView.x += dx;
+      G.mapView.y += dy;
+      
+      G.mapView.startX = clientX;
+      G.mapView.startY = clientY;
+      
+      updateMapTransform();
+    }
+
+    function mapDragEnd() {
+      G.mapView.isDragging = false;
+    }
+
+    function mapZoom(e) {
+      e.preventDefault();
+      // Zoom factor (adjusts sensitivity)
+      const delta = e.deltaY > 0 ? -0.15 : 0.15;
+      applyZoom(delta);
+    }
+
+    function zoomBtn(amount) {
+      applyZoom(amount);
+    }
+
+  function applyZoom(amount) {
+      const container = document.getElementById('world-node-map');
+      const minScale = container ? Math.max(1.0, container.clientHeight / 320) : 1.0;
+      
+      const oldScale = G.mapView.scale;
+      G.mapView.scale = Math.min(Math.max(minScale, G.mapView.scale + amount), 4.0);
+      
+      if (oldScale !== G.mapView.scale) {
+          // Zoom towards center
+          const container = document.getElementById('world-node-map');
+          const centerX = container.clientWidth / 2;
+          const centerY = container.clientHeight / 2;
+          
+          G.mapView.x = centerX - (centerX - G.mapView.x) * (G.mapView.scale / oldScale);
+          G.mapView.y = centerY - (centerY - G.mapView.y) * (G.mapView.scale / oldScale);
+          
+          updateMapTransform();
+      }
+    }
+
+
+    function resetMap() {
+      // Resets to fit height
+      const container = document.getElementById('world-node-map');
+      if (container) G.mapView.scale = Math.max(1, container.clientHeight / 320);
+      else G.mapView.scale = 1;
+      
+      if (G.currentNode) scrollToNode(G.currentNode);
+      else {
+        G.mapView.x = 0;
+        G.mapView.y = 0;
+        updateMapTransform();
+      }
+    }
+
+    function scrollToNode(nodeId) {
+      const node = NODE_MAP[nodeId]; 
+      const container = document.getElementById('world-node-map');
+      if (!node || !container) return;
+      
+      const W = 1200;
+      const cW = container.clientWidth;
+      const cH = container.clientHeight;
+      
+      // We want a decent zoom level when focusing a node (e.g. 1.5x)
+      if (G.mapView.scale < 1.5) G.mapView.scale = 1.5;
+
+      const nodeX = (node.x / 200) * W * G.mapView.scale;
+      const nodeY = (node.y / 100) * 320 * G.mapView.scale;
+      
+      G.mapView.x = -nodeX + (cW / 2);
+      G.mapView.y = -nodeY + (cH / 2);
+      
+      updateMapTransform();
+    }
     function renderNodeDetail(nodeId) {
       const panel = $('node-detail-panel'); if (!panel) return;
       const node = NODE_MAP[nodeId]; if (!node) return;
@@ -7601,25 +8439,56 @@ function getStg(id) {
         }
       } catch (e) { notify('Save failed: ' + e.message); }
     }
-    function loadGame() {
-      try {
-        const raw = localStorage.getItem('eternalSov4'); if (!raw) { notify('No save found.'); return; }
-        const { G: sg, triggered: st, autoIds } = JSON.parse(raw);
-        Object.assign(G, sg); Object.assign(triggered, st || {});
+function loadGame() {
+    try {
+        const raw = localStorage.getItem('eternalSov4');
+        if (!raw) { notify('No save found.'); return; }
+        
+        const data = JSON.parse(raw);
+        const loadedG = data.G;
+
+        // FIX: Deep Merge logic + Force Defaults
+        G = Object.assign(G, loadedG);
+
+        if (isNaN(G.guildExp)) G.guildExp = 0; 
+        if (isNaN(G.guildRankIdx)) G.guildRankIdx = 0; 
+        if (typeof G.musicMuted === 'undefined') G.musicMuted = true;
+        
+
+        // Explicitly check for new features added in recent updates
+        if (!G.guildMissions) G.guildMissions = [];
+        if (G.guildExp === undefined) G.guildExp = 0;
+        if (G.guildRankIdx === undefined) G.guildRankIdx = 0;
+        if (!G.factionRep) G.factionRep = { alchemists: 0, merchants: 0, martial: 0, scholars: 0, demons: 0, beasts: 0 };
+  
+
+        Object.assign(triggered, data.triggered || {});
         recalcManBons();
+
         if (G.charDone) {
-          document.getElementById('cmod').style.display = 'none';
-          document.getElementById('app').style.display = 'block';
+            document.getElementById('cmod').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
         }
-        if (autoIds) for (const id of autoIds) { const daoId = id.replace('dao_', ''); if (G.daos[daoId]) { toggleAutoDAO(daoId); } }
+
+        if (data.autoIds) {
+            for (const id of data.autoIds) {
+                const daoId = id.replace('dao_', '');
+                if (G.daos[daoId]) { toggleAutoDAO(daoId); }
+            }
+        }
+
         initCompanions();
         renderContTabs(); renderNPCs(); renderGuilds(); renderShop(); renderArrays();
-        notify('📂 Jade slip unsealed. Welcome back.'); $('svtm').textContent = 'Loaded: ' + new Date().toLocaleTimeString();
+        notify('📂 Jade slip unsealed. Welcome back.'); 
+        $('svtm').textContent = 'Loaded: ' + new Date().toLocaleTimeString();
         initQiParticles();
-        document.getElementById('bg-music').muted = G.musicMuted;
         updateUI();
-      } catch (e) { notify('Load failed: ' + e.message); }
+    } catch (e) { 
+        console.error(e);
+        notify('Load failed: structure mismatch. Try Resetting if error persists.'); 
     }
+}
+
     function resetGame() {
       if (!confirm('Shatter your cultivation and return to mortal? All progress will be lost permanently.')) return;
       try { localStorage.removeItem('eternalSov4'); } catch (e) { } location.reload();
@@ -7644,12 +8513,23 @@ function getStg(id) {
      return Math.floor(n).toString();
     }    let notifT;
     function notify(msg) { const e = $('notif'); if (!e) return; e.textContent = msg; e.classList.add('show'); clearTimeout(notifT); notifT = setTimeout(() => e.classList.remove('show'), 3400); }
-    function showT(id, btn) {
+function showT(id, btn) {
       document.querySelectorAll('.tc').forEach(t => t.classList.remove('act'));
       document.querySelectorAll('.nb').forEach(b => b.classList.remove('act'));
       $(id).classList.add('act'); if (btn) btn.classList.add('act');
-      // Refresh region view on world map switch
-      if (id === 'world') { renderWorldMap(); renderCombatArena(); renderWorldBosses(); if (G.currentNode) renderNodeDetail(G.currentNode); }
+      
+      // Updated World tab logic
+      if (id === 'world') { 
+        renderWorldMap(); 
+        renderCombatArena(); 
+        renderWorldBosses(); 
+        if (G.currentNode) { 
+            renderNodeDetail(G.currentNode);
+            // Slight delay allows the map to render before calculating scroll width
+            setTimeout(() => scrollToNode(G.currentNode), 50);
+        } 
+      }
+      
       if (id === 'chars') renderNPCs();
       if (id === 'companions') renderCompanions();
       if (id === 'guild') { renderGuilds(); }
@@ -7658,7 +8538,6 @@ function getStg(id) {
       if (id === 'sect') renderSect();
       if (id === 'form') renderArrays();
     }
-
     // ══════════════════════════════════════════════════════════════
     //                    ADMIN CONSOLE (DEV TOOLS)
     // Adds a password-protected admin overlay for quick debug/actions
@@ -7695,6 +8574,15 @@ function getStg(id) {
     //                    INIT
     // ══════════════════════════════════════════════════════════════
     function init() {
+    // Safety check for missing objects
+    if (!G.shopBon) G.shopBon = { stMult: 1, goldMult: 1, pq: 0, ev: 0, loot: 1, cdmg: 1, shopDisc: 1, stGen: 0, coreBonus: 0 };
+    if (!G.beasts) G.beasts = Object.fromEntries(Object.keys(CORES).map(k => [k, 0]));
+    if (!G.inv) G.inv = [];
+    if (!G.equipped) G.equipped = { weapon: null, armor: null, accessory: null };
+    if (typeof G.musicMuted === 'undefined') G.musicMuted = true;
+    
+    
+    // ... existing load/save logic ...
       // Try loading save first
       try {
         const raw = localStorage.getItem('eternalSov4');
@@ -7708,6 +8596,229 @@ function getStg(id) {
       initQiParticles();
     }
     init();
+    // YouTube API Loader
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+let player;
+let audioContextUnblocked = false;
+
+// Seed isMuted from the already-loaded G so the manager's first toggle() is correct
+const _initMusicMuted = (typeof G !== 'undefined' && typeof G.musicMuted !== 'undefined') ? G.musicMuted : true;
+
+const MusicManager = {
+    isMuted: _initMusicMuted,
+    currentIndex: 0,
+    volume: 50,
+
+    get playlist() {
+        const defaults = [
+            { name: "Cultivation Theme", id: "Cultivation Music.mp3", type: "local" },
+        ];
+        const custom = (typeof G !== 'undefined' && G.customPlaylist) ? G.customPlaylist : [];
+        return [...defaults, ...custom];
+    },
+
+    updateButtonUI() {
+        const btn = document.getElementById('music-toggle');
+        const trackInfo = document.getElementById('track-info');
+        if (!btn || !trackInfo) return;
+        
+        if (this.isMuted) {
+            btn.className = "btn music-btn-off";
+            btn.textContent = "🔈 MUSIC: OFF";
+            trackInfo.textContent = "Sovereign Silence"; 
+        } else {
+            btn.className = "btn music-btn-on";
+            btn.textContent = "🔊 MUSIC: ON";
+            const currentTrack = this.playlist[this.currentIndex];
+            if (currentTrack) trackInfo.textContent = currentTrack.name;
+        }
+    },
+
+    toggle() {
+        this.isMuted = !this.isMuted;
+        this.updateButtonUI();
+        
+        if (this.isMuted) {
+            if (player && typeof player.pauseVideo === 'function') player.pauseVideo();
+            const local = document.getElementById('bg-music');
+            if (local) local.pause();
+        } else {
+            // The click event itself acts as the browser's required "user gesture"
+            this.playCurrent();
+        }
+        
+        if(typeof G !== 'undefined') G.musicMuted = this.isMuted;
+    },
+
+    playCurrent() {
+        if (this.isMuted) return;
+        
+        if (this.currentIndex >= this.playlist.length) this.currentIndex = 0;
+        const track = this.playlist[this.currentIndex];
+        if (!track) return;
+
+        this.updateButtonUI();
+
+        if (track.type === "youtube") {
+            const localAudio = document.getElementById('bg-music');
+            if (localAudio) localAudio.pause();
+
+            if (player && typeof player.loadVideoById === 'function') {
+                try {
+                    player.loadVideoById(track.id);
+                    player.setVolume(this.volume);
+                } catch (e) {
+                    notify("The melody's Dao is shattered. Seeking another...");
+                }
+            } else {
+                notify("Channeling Qi to the Sound Formation...");
+            }
+        } else {
+            if (player && typeof player.pauseVideo === 'function') player.pauseVideo();
+            
+            const local = document.getElementById('bg-music');
+            if (local) {
+                local.src = track.id;
+                local.volume = this.volume / 100;
+                // Direct play inside the click event satisfies autoplay policies
+                local.play().catch(e => console.log("Unseal the Sound Formation to hear the Dao."));
+            }
+        }
+    },
+
+    next() {
+        this.currentIndex = (this.currentIndex + 1) % this.playlist.length;
+        this.playCurrent();
+    },
+
+    selectTrack(idx) {
+        this.currentIndex = idx;
+        if (this.isMuted) {
+            this.toggle(); 
+        } else {
+            this.playCurrent();
+        }
+        this.closePlaylist();
+    },
+
+    removeTrack(idx) {
+        if (idx === 0) {
+            notify("This primordial melody cannot be erased.");
+            return;
+        }
+        const actualCustomIdx = idx - 1; 
+        if (confirm("Sever the soul-link to this melody?")) {
+            if (!G.customPlaylist) G.customPlaylist = [];
+            G.customPlaylist.splice(actualCustomIdx, 1);
+            
+            if (this.currentIndex === idx) {
+                this.currentIndex = 0;
+                if (!this.isMuted) this.playCurrent();
+            } else if (this.currentIndex > idx) {
+                this.currentIndex--;
+            }
+            saveGame(true);
+            this.renderPlaylist();
+        }
+    },
+
+    openAddModal() { document.getElementById('music-add-modal').classList.add('act'); },
+    closeAddModal() { 
+        document.getElementById('music-add-modal').classList.remove('act');
+        document.getElementById('ms-input-url').value = "";
+        document.getElementById('ms-input-name').value = "";
+    },
+    
+    saveNewTrack() {
+        const url = document.getElementById('ms-input-url').value;
+        const name = document.getElementById('ms-input-name').value || "Unknown Heavenly Dao";
+        
+        let id = null;
+        try {
+            if (url.includes('v=')) id = url.split('v=')[1].split('&')[0];
+            else if (url.includes('youtu.be/')) id = url.split('youtu.be/')[1].split('?')[0];
+            else if (url.includes('embed/')) id = url.split('embed/')[1].split('?')[0];
+            else if (url.length === 11) id = url;
+        } catch(e) { id = null; }
+
+        if (id && id.length === 11) {
+            if (!G.customPlaylist) G.customPlaylist = [];
+            G.customPlaylist.push({ name: name, id: id, type: "youtube" });
+            notify("✨ Melody Inscribed into your Divine Soul.");
+            saveGame(true);
+            this.closeAddModal();
+            this.selectTrack(this.playlist.length - 1);
+        } else {
+            notify("The spatial coordinates of this link are invalid.");
+        }
+    },
+
+    openPlaylist() {
+        this.renderPlaylist();
+        document.getElementById('music-list-modal').classList.add('act');
+    },
+    closePlaylist() { document.getElementById('music-list-modal').classList.remove('act'); },
+
+    renderPlaylist() {
+        const container = document.getElementById('playlist-container');
+        if(!container) return;
+        
+        container.innerHTML = this.playlist.map((track, i) => `
+            <div class="playlist-item ${this.currentIndex === i ? 'active' : ''}">
+                <div class="track-name" onclick="MusicManager.selectTrack(${i})">
+                    ${i === this.currentIndex ? '▶ ' : ''}${track.name} 
+                    <span style="font-size:0.6rem; opacity:0.5;">(${track.type})</span>
+                </div>
+                ${i > 0 ? `<div class="remove-track" onclick="MusicManager.removeTrack(${i})">✕</div>` : ''}
+            </div>
+        `).join('');
+    },
+
+    setVolume(val) {
+        this.volume = val;
+        if (player && typeof player.setVolume === 'function') player.setVolume(val);
+        const local = document.getElementById('bg-music');
+        if(local) local.volume = val / 100;
+    }
+};
+
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('yt-player', {
+        height: '300', 
+        width: '300',  
+        videoId: '0m_S_W_A-ms', 
+        playerVars: { 
+            'autoplay': 0, 
+            'controls': 0, 
+            'disablekb': 1,
+            'fs': 0,
+            'rel': 0,
+            'origin': window.location.origin 
+        },
+        events: {
+            'onReady': (e) => {
+                e.target.setVolume(MusicManager.volume);
+            },
+            'onStateChange': (e) => {
+                if (e.data === 0) MusicManager.next();
+            },
+            'onError': (e) => {
+                console.log("YT Error:", e.data);
+                if (e.data === 150 || e.data === 101) {
+                    notify("The void swallows this melody, preventing it from reaching you.");
+                } else {
+                    notify("⚠️ The spatial rift to this melody collapsed. Skipping...");
+                }
+                MusicManager.next();
+            }
+        }
+    });
+}
+
   </script>
 </body>
 
