@@ -2604,10 +2604,47 @@ input[type=range]::-webkit-slider-thumb {
 .node-svg-container svg {
   min-width: 800px; /* Forces scroll on small screens */
 }
+
+/* ═══════════════════════════════════════════════════════════
+   STAGE: THE CELESTIAL ATMOSPHERE
+   ═══════════════════════════════════════════════════════════ */
   </style>
 </head>
 
 <body>
+  <!-- ═══ CELESTIAL ATMOSPHERE: Ambient Sky Layer ═══ -->
+  <div id="sky-layer">
+    <svg class="sky-cloud" style="--cloud-dur:55s;--cloud-delay:0s;top:8%;" width="180" height="50" viewBox="0 0 180 50" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="90" cy="32" rx="85" ry="18" fill="rgba(245,235,210,0.55)"/>
+      <ellipse cx="55" cy="25" rx="40" ry="14" fill="rgba(245,235,210,0.45)"/>
+      <ellipse cx="130" cy="22" rx="35" ry="12" fill="rgba(245,235,210,0.4)"/>
+    </svg>
+    <svg class="sky-cloud" style="--cloud-dur:40s;--cloud-delay:18s;top:4%;" width="120" height="38" viewBox="0 0 120 38" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="60" cy="26" rx="55" ry="12" fill="rgba(245,235,210,0.4)"/>
+      <ellipse cx="40" cy="20" rx="28" ry="10" fill="rgba(245,235,210,0.35)"/>
+      <ellipse cx="88" cy="18" rx="24" ry="9" fill="rgba(245,235,210,0.3)"/>
+    </svg>
+    <svg class="sky-cloud" style="--cloud-dur:28s;--cloud-delay:8s;top:14%;" width="90" height="28" viewBox="0 0 90 28" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="45" cy="20" rx="40" ry="10" fill="rgba(245,235,210,0.3)"/>
+      <ellipse cx="28" cy="14" rx="20" ry="8" fill="rgba(245,235,210,0.25)"/>
+    </svg>
+    <!-- Crane SVG silhouette -->
+    <svg class="sky-crane" style="--crane-dur:34s;--crane-delay:6s;top:11%;" width="52" height="32" viewBox="0 0 52 32" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="24" cy="18" rx="14" ry="5" fill="rgba(30,15,0,0.25)" transform="rotate(-8 24 18)"/>
+      <path d="M14,16 Q4,5 2,8 Q8,12 14,17Z" fill="rgba(30,15,0,0.22)"/>
+      <path d="M34,16 Q48,5 50,8 Q44,12 34,17Z" fill="rgba(30,15,0,0.22)"/>
+      <path d="M24,14 Q26,8 29,6 Q30,4 28,5 Q26,6 24,9Z" fill="rgba(30,15,0,0.25)"/>
+      <line x1="20" y1="22" x2="15" y2="30" stroke="rgba(30,15,0,0.2)" stroke-width="1.2"/>
+      <line x1="22" y1="22" x2="17" y2="30" stroke="rgba(30,15,0,0.2)" stroke-width="1.2"/>
+    </svg>
+    <svg class="sky-crane" style="--crane-dur:42s;--crane-delay:22s;top:7%;" width="44" height="27" viewBox="0 0 52 32" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="24" cy="18" rx="14" ry="5" fill="rgba(30,15,0,0.18)" transform="rotate(-8 24 18)"/>
+      <path d="M14,16 Q4,5 2,8 Q8,12 14,17Z" fill="rgba(30,15,0,0.16)"/>
+      <path d="M34,16 Q48,5 50,8 Q44,12 34,17Z" fill="rgba(30,15,0,0.16)"/>
+      <path d="M24,14 Q26,8 29,6 Q30,4 28,5 Q26,6 24,9Z" fill="rgba(30,15,0,0.18)"/>
+    </svg>
+  </div>
+
   <audio id="bg-music" loop>
   <source src="Cultivation Music.mp3" type="audio/mpeg">
 </audio>
@@ -2847,7 +2884,6 @@ input[type=range]::-webkit-slider-thumb {
         </div>
         <div class="pnl">
           <div class="pt">修炼室 · Soul Cultivation</div>
-          <div class="ps">Cultivate your divine soul across infinite realms of transcendence.</div>
         <div class="ts mb8" id="soul-info">Current: <b class="tg">—</b> · Stage: <b class="tg">—</b> · Realm Index: <b class="tg">—</b></div>
           <div class="pw">
             <div id="qbar" class="pf pf-qi" style="width:0%"></div>
@@ -8785,8 +8821,6 @@ const MusicManager = {
         if(local) local.volume = val / 100;
     }
 };
-
-function onYouTubeIframeAPIReady() {
     player = new YT.Player('yt-player', {
         height: '300', 
         width: '300',  
@@ -8817,7 +8851,7 @@ function onYouTubeIframeAPIReady() {
             }
         }
     });
-}
+
 
   </script>
 </body>
